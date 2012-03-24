@@ -1,0 +1,13 @@
+<program> 		::= <instrukcja> "," <program> | eps
+<instrukcja> 	::= <definicja> | <wyrażenie>
+
+<definicja> 	::= <przypisanie> | <skrót-funkcji>
+<przypisanie> 	::= <nazwa> "=" <wyrażenie>
+<skrót-funkcji> ::= "@" <nazwa> <lambda>	# to samo co przypisanie <nazwa> "=" <nazwa> <lambda>
+
+<funkcja> 		::= <nazwa> <lambda> | <lambda>
+<lambda> 		::= "[" <lista-arg> "->" <lista-def> <wyrazenie> "]"
+<lista-arg> 	::= <nazwa> "," <lista-arg> | eps
+<lista-def>		::= <definicja> "," <lista-def> | eps
+
+<wyrazenie>		::= ...
