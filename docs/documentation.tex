@@ -1,0 +1,105 @@
+\documentclass[a4paper,10pt]{article}
+
+% \documentclass[a4paper,12pt]{article}
+
+\usepackage{amssymb}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{amsmath, amstext, amsopn, amsbsy, amscd, amsxtra}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{fullpage}
+\usepackage{syntax}
+
+\setlength{\headheight}{15pt}
+\headsep = 10pt
+\usepackage{listings}
+\lstset{
+   language=[x86masm]Assembler,
+   basicstyle=\ttfamily,
+   keywordstyle=\bfseries,
+   %commentstyle=\tiny,
+   numbers=left,
+   numberstyle=\footnotesize,
+   stepnumber=1,
+   numbersep=5pt,
+%   backgroundcolor=\color{white},
+   showspaces=false,
+   showstringspaces=false,
+   showtabs=false,
+%   frame=single,
+%   tabsize=2,
+%   captionpos=b,
+   breaklines=true,
+   breakatwhitespace=false,
+   escapeinside={\%*}{*)}
+}
+\usepackage{fancyhdr}
+\fancyhf{}  % clear header + footer before defining new parameters
+
+\pagestyle{fancy}
+
+\def \labtitle {Projekt (...)}
+\def \labauthors {Szymon Gut, Konrad Strack}
+
+\title{Teoria Współbieżności - \labtitle}
+\author{\labauthors}
+
+\lhead{\labauthors}
+\rhead{\labtitle}
+\rfoot{strona \thepage}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+\lstset{numbersep=0.5cm, numberstyle=\tiny}
+
+\begin{document}
+
+  \begin{titlepage}
+    \begin{center}
+%       \includegraphics[width=0.3\textwidth]{../logo.png}
+      \vskip 1cm
+      EAIiE - Katedra Informatyki \vskip 1cm
+      \textsc{\LARGE Teoria Kompilacji}\\[1.5cm]
+
+      \hrule \medskip
+      \huge \labtitle
+ \\ \smallskip
+      \normalsize
+      \smallskip \hrule
+
+
+    \end{center}
+
+      \vskip 2cm
+      \normalsize
+      \noindent \emph{Autorzy:}\smallskip\\
+		\textbf{Szymon \textsc{Gut}}\\
+		\textbf{Konrad \textsc{Strack}}
+
+    \begin{center}
+      \vfill
+      \today
+    \end{center}
+
+  \end{titlepage}
+
+\setcounter{section}{0}
+
+\section{Tutorial}
+
+\section{Specyfikacja gramatyki języka}
+
+\begin{grammar}
+ <statement> ::= <ident> `=' <expr>
+	\alt `for' <ident> `=' <expr> `to' <expr> `do' <statement>
+	\alt `{' <stat-list> `}'
+	\alt <empty> 
+\end{grammar}
+
+
+\end{document}
