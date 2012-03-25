@@ -1,4 +1,4 @@
-<program> 		::= <instrukcja> "," <program> | eps
+<program> 		::= <instrukcja> <separator> <program> | eps
 <instrukcja> 	::= <definicja> | <wyrażenie>
 
 <definicja> 	::= <przypisanie> | <skrót-funkcji>
@@ -8,6 +8,7 @@
 <funkcja> 		::= <nazwa> <lambda> | <lambda>
 <lambda> 		::= "[" <lista-arg> "->" <lista-def> <wyrazenie> "]"
 <lista-arg> 	::= <nazwa> "," <lista-arg> | eps
-<lista-def>		::= <definicja> "," <lista-def> | eps
+<lista-def>		::= <definicja> <separator> <lista-def> | eps
 
+<separator>		::= "\n" | ";"
 <wyrazenie>		::= ...

@@ -1,0 +1,9 @@
+inc = [n -> n+1]
+prog = inc(0)
+
+@silnia [ n ->
+	x = prog; cos = 3
+	if n <= x then 1 else n*silnia(n-1)
+]
+
+silnia(4)
