@@ -1,14 +1,21 @@
-<program> 		::= <instrukcja> <separator> <program> | eps
-<instrukcja> 	::= <definicja> | <wyrażenie>
+<program>       ::= <instrukcja> <separator> <program> | <instrukcja> | eps
+<instrukcja>    ::= <definicja> | <wyrażenie>
 
-<definicja> 	::= <przypisanie> | <skrót-funkcji>
-<przypisanie> 	::= <nazwa> "=" <wyrażenie>
-<skrót-funkcji> ::= "@" <nazwa> <lambda>	# to samo co przypisanie <nazwa> "=" <nazwa> <lambda>
 
-<funkcja> 		::= <nazwa> <lambda> | <lambda>
-<lambda> 		::= "[" <lista-arg> "->" <lista-def> <wyrazenie> "]"
-<lista-arg> 	::= <nazwa> "," <lista-arg> | eps
-<lista-def>		::= <definicja> <separator> <lista-def> | eps
+<definicja>     ::= <przypisanie> | <skrót-funkcji>
+<przypisanie>   ::= <nazwa> "=" <wyrażenie>
+<skrót-funkcji> ::= "@" <nazwa> <lambda>			# to samo co przypisanie <nazwa> "=" <nazwa> <lambda>
 
-<separator>		::= "\n" | ";"
-<wyrazenie>		::= ...
+
+<funkcja>       ::= <nazwa> <lambda> | <lambda>		# użycie <nazwa> <lambda> pozwala na rekurencję w "anonimowej" funkcji
+<lambda>        ::= "[" <lista-arg> "->" <lista-def> <wyrazenie> "]"
+
+<lista-arg>     ::= <nazwa> <lista-arg1> | eps
+<lista-arg1>    ::= "," <nazwa> <lista-arg1> | eps
+
+<lista-def>     ::= <definicja> <lista-def1> | eps
+<lista-def1>    ::= <separator> <definicja> <lista-def1> | eps
+
+
+<separator>     ::= "\n" | ";"
+<wyrażenie>     ::= ...
