@@ -100,45 +100,79 @@ Wyposażony jest w automatyczne zarządzanie pamięcią.
 Umożliwia dynamiczne tworzenie pól struktur.
 Zezwala na wielokrotne przypisanie wartości do zmiennych.
 
-\subsection{Struktura kodu źródłowego}
-Kod źródłowy programu w języku Forvelki składa się z ciągu instrukcji przypisania oraz wyrażeń.
-Instrukcje przypisań do zmiennych modyfikują środowisko, którego używają wyrażenia.
-Wyrażenia są ewaluowane i~wypisywane na ekran.
+Na kształt języka Forvelki miały wpływ inne języki takie jak: Python, Ruby, OCaml i Haskell.
 
 Przykładowy kod wypisujący na ekran napis \emph{hello, world} wygląda następująco.
 \begin{lstlisting}
 "hello, world"
 \end{lstlisting}
 
+
+\subsection{Struktura kodu źródłowego}
+Kod źródłowy programu w języku Forvelki składa się z ciągu instrukcji przypisania oraz wyrażeń rozdzielonych znakami nowej linii bądź średnikami.
+Wyrażenia są ewaluowane i~wypisywane na ekran.
+Instrukcje przypisań do zmiennych modyfikują środowisko, którego używają wyrażenia.
+Mają postać \texttt{<zmienna>~=~<wartość>}.
+Zmienne są słowami pisanymi z małej litery.
+Związane zmienne mogą mieć ponownie przypisaną wartość.
+
+
 \subsection{Typy danych}
 Język Forvelki obsługuje następujące typy danych: liczby całkowie, liczby zmiennoprzecinkowe, napisy, typ logiczny, struktury oraz identyfikatory.
-Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np. \texttt{3.14}.
-Napisy muszą być ujęte w podwójne cudzysłowy
+Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np.~\texttt{3.14}.
+Napisy muszą być ujęte w podwójne cudzysłowy, np. \texttt{''raz dwa trzy''}.
+Identyfikatory to słowa pisane z wielkiej litery.
+Przy porównaniu dwa identyfikatory są równe wtedy i tylko wtedy, gdy są takimi samymi słowami.
+Z typem logicznym związane są dwa identyfikatory, \texttt{True} i \texttt{False}, które oznaczają odpowiednio prawdę i fałsz.
 
+Struktury tworzy się składnią \texttt{\{ <nazwa pola> : <wartość> , ... \}}, np. \texttt{\{x:1, y:2\}}.
+Nazwa pola jest dowolnym słowem pisanym z małej litery.
+Do pól można odwoływać się przez operator kropki, np. \texttt{\{x:1,~y:2\}.y}.
+Gdy zmienna jest związana ze strukturą, można modyfikować jej zawartość poprzez przypisania do pól.
+Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość jeszcze nie istnieje.
 
 \subsection{Wyrażenie warunkowe}
 Wyrażenie warunkowe ma postać \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
 
 \subsection{Funkcje}
-Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <wyrażenie>]}.
+Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <przypisanie>,<przypisanie>,..., <wyrażenie>]}.
 Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
 Osiąga się to przez umieszczenie nazwy przez ciałem funkcji.
-Funkcja \texttt{silnia[n -> if n <= 1 then 1 else n*silnia(n-1)]} jest przykładem 
+Nazwa jest pojedynczym słowem pisanym z małej litery.
+Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n -> prog=1, if n <= prog then 1 else n*silnia(n-1)]}.
+Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
+
+\subsection{Domknięcia}
+Za każdym razem, gdy definiowana jest nowa funkcja, związane zmienne, których ona używa są zapamiętane.
+W ten sposób, nawet gdy zostaną one później nadpisane, funkcja będzie dalej korzystać ze starych wartości.
+
+\subsection{Leniwe wartościowanie}
+Wyliczane są jedynie wartości w najbardziej zewnętrznym zasięgu, to jest nie objęte ciałem żadnej funkcji oraz wartości pośrednie wymagane do nich.
+Kolejność wyliczania wartości w obrębie funkcji jest zgodna z~kolejnością przypisania do zmiennych.
+
+
+\subsection{Wejście/wyjście}
+Dostępna jest funkcja \texttt{write[x->x]}, która ma efekt uboczny - wypisanie argumentu na standardowe.
+Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \section{Specyfikacja gramatyki języka}
 
 \begin{grammar}
-<program>       ::= <instrukcja> <separator> <program> | <instrukcja> | $\varepsilon$
+<program>       ::= <instrukcja> <separator> <program> | <instrukcja>
 
-<instrukcja>    ::= <definicja> | <wyrażenie>
+<separator>     ::= `\\n' | `;'
+
+<instrukcja>    ::= <definicja> | <wyrażenie> | $\varepsilon$
 
 <definicja>     ::= <przypisanie> | <skrót-funkcji>
 
 <przypisanie>   ::= <lwartość> `=' <wyrażenie>
 
 <skrót-funkcji> ::= `@' <nazwa> <lambda>
+
+\vskip 0.5cm
 
 <funkcja>       ::= <nazwa> <lambda> | <lambda>
 
@@ -152,8 +186,7 @@ Funkcja \texttt{silnia[n -> if n <= 1 then 1 else n*silnia(n-1)]} jest przykład
 
 <lista-def1>    ::= <separator> <definicja> <lista-def1> | $\varepsilon$
 
-
-<separator>     ::= `\\n' | `;'
+\vskip 0.5cm
 
 <wyrażenie>     ::= <struktura> | <funkcja> | <symbol> | <liczba> | <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <napis>
 
@@ -161,7 +194,7 @@ Funkcja \texttt{silnia[n -> if n <= 1 then 1 else n*silnia(n-1)]} jest przykład
 
 <operator-jedn> ::= `+' | `-' | `~' | `!'
 
-
+\vskip 0.5cm
 
 <lwartość>      ::= <nazwa> <lwartość1>
 
@@ -175,17 +208,23 @@ Funkcja \texttt{silnia[n -> if n <= 1 then 1 else n*silnia(n-1)]} jest przykład
 
 <lista-przypisań-str1>   ::= `,' <przypisanie-str> <lista-przypisań-str1> | $\varepsilon$
 
+\vskip 0.5cm
+
 <wywolanie-funkcji>                ::= <nazwa> `(' <lista-argumentów-wywołania> `)' | <lambda> `(' <lista wyrazen> `)'
 
 <lista-argumentów-wywołania>       ::= <wyrażenie> <lista-argumentów-wywołania1> | $\varepsilon$
 
 <lista-argumentów-wywołania>       ::= `,' <wyrażenie> <lista-argumentów-wywołania1> |$\varepsilon$
 
+\vskip 0.5cm
+
 <cyfra>         ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9'
 
 <wielki-znak>   ::= `A' | `B' | `C' | `D' | `E' | `F' | `G' | `H' | `I' | `J' | `K' | `L' | `M' | `N' | `O' | `P' | `Q' | `R' | `S' | `T' | `U' | `V' | `W' | `X' | `Y' | `Z'
 
 <mały-znak>     ::= `a' | `b' | `c' | `d' | `e' | `f' | `g' | `h' | `i' | `j' | `k' | `l' | `m' | `n' | `o' | `p' | `q' | `r' | `s' | `t' | `u' | `v' | `w' | `x' | `y' | `z'
+
+\vskip 0.5cm
 
 <znak>          ::= <mały-znak> | <wielki-znak>
 
