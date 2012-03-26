@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[4paper,10pt]{article}
 
 % \documentclass[a4paper,12pt]{article}
 
@@ -43,7 +43,7 @@
 
 \pagestyle{fancy}
 
-\def \labtitle {Forvelki}
+\def \labtitle {Język Forvelki}
 \def \labauthors {Szymon Gut, Konrad Strack}
 
 \title{Teoria Kompilacji - \labtitle}
@@ -63,8 +63,8 @@
     \begin{center}
 %       \includegraphics[width=0.3\textwidth]{../logo.png}
       \vskip 1cm
-      EAIiE - Katedra Informatyki \vskip 1cm
-      \textsc{\LARGE Teoria Kompilacji}\\[1.5cm]
+      EAIiE \\ Katedra Informatyki \vskip 3cm
+%     \textsc{\LARGE Teoria Kompilacji}\\[1.5cm]
 
       \hrule \medskip
       \huge \labtitle
@@ -75,7 +75,7 @@
 
     \end{center}
 
-      \vskip 2cm
+      \vskip 10cm
       \normalsize
       \noindent \emph{Autorzy:}\smallskip\\
 		\textbf{Szymon \textsc{Gut}}\\
@@ -91,6 +91,41 @@
 \setcounter{section}{0}
 
 \section{Tutorial}
+
+\subsection{Wprowadzenie}
+Forvelki to interpretowany, silnie i dynamicznie typowany język funkcyjny o w pełni leniwym wartościowaniu.
+Funkcje są wartościami pierwszej klasy i mogą być definiowane anonimowe.
+Język wspiera mechanizm domknięć.
+Wyposażony jest w automatyczne zarządzanie pamięcią.
+Umożliwia dynamiczne tworzenie pól struktur.
+Zezwala na wielokrotne przypisanie wartości do zmiennych.
+
+\subsection{Struktura kodu źródłowego}
+Kod źródłowy programu w języku Forvelki składa się z ciągu instrukcji przypisania oraz wyrażeń.
+Instrukcje przypisań do zmiennych modyfikują środowisko, którego używają wyrażenia.
+Wyrażenia są ewaluowane i~wypisywane na ekran.
+
+Przykładowy kod wypisujący na ekran napis \emph{hello, world} wygląda następująco.
+\begin{lstlisting}
+"hello, world"
+\end{lstlisting}
+
+\subsection{Typy danych}
+Język Forvelki obsługuje następujące typy danych: liczby całkowie, liczby zmiennoprzecinkowe, napisy, typ logiczny, struktury oraz identyfikatory.
+Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np. \texttt{3.14}.
+Napisy muszą być ujęte w podwójne cudzysłowy
+
+
+\subsection{Wyrażenie warunkowe}
+Wyrażenie warunkowe ma postać \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
+
+\subsection{Funkcje}
+Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <wyrażenie>]}.
+Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
+Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
+Aby funkcja mogła być rekurencyjna, musi być nazwana.
+Osiąga się to przez umieszczenie nazwy przez ciałem funkcji.
+Funkcja \texttt{silnia[n -> if n <= 1 then 1 else n*silnia(n-1)]} jest przykładem 
 
 \section{Specyfikacja gramatyki języka}
 
