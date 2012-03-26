@@ -3,12 +3,12 @@
 
 
 <definicja>     ::= <przypisanie> | <skrót-funkcji>
-<przypisanie>   ::= <nazwa> "=" <wyrażenie>
+<przypisanie>   ::= <lwartość> "=" <wyrażenie>
 <skrót-funkcji> ::= "@" <nazwa> <lambda>			# to samo co przypisanie <nazwa> "=" <nazwa> <lambda>
 
 
 <funkcja>       ::= <nazwa> <lambda> | <lambda>		# użycie <nazwa> <lambda> pozwala na rekurencję w "anonimowej" funkcji
-<lambda>        ::= "[" <lista-arg> "->" <lista-def> <wyrazenie> "]"
+<lambda>        ::= "[" <lista-arg> "->" <lista-def> <wyrażenie> "]"
 
 <lista-arg>     ::= <nazwa> <lista-arg1> | eps
 <lista-arg1>    ::= "," <nazwa> <lista-arg1> | eps
@@ -18,4 +18,21 @@
 
 
 <separator>     ::= "\n" | ";"
-<wyrażenie>     ::= ...
+<wyrażenie>     ::= <struktura> | <funkcja>
+
+
+
+<lwartość>      ::= <nazwa> <lwartość1>
+<lwartość1>		::= "." <nazwa> <lwartość1> | eps
+
+<struktura>              ::= "{" <lista-przypisań-str> "}"
+<przypisanie-str>        ::= <lwartość> ":" <wyrażenie>
+
+<lista-przypisań-str>    ::= <przypisanie-str> <lista-przypisań-str1> | eps
+<lista-przypisań-str1>   ::= "," <przypisanie-str> <lista-przypisań-str1> | eps
+
+<wywolanie-funkcji>      ::= <nazwa> "(" <lista-wyrazen> ")" | <lambda> "(" <lista wyrazen> ")"
+<lista-wyrazen>          ::= <wyrażenie> <lista-wyrazen1> | eps
+<lista-wyrazen1>         ::= "," <wyrażenie> <lista-wyrazen1> |eps
+
+
