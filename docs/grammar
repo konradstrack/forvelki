@@ -18,7 +18,9 @@
 
 
 <separator>     ::= "\n" | ";"
-<wyrażenie>     ::= <struktura> | <funkcja>
+<wyrażenie>     ::= <struktura> | <funkcja> | <symbol> | <liczba> | <wyrażenie> <operator> <wyrażenie> | "(" <wyrażenie> ")" | <operator-jedn> <wyrażenie> | <napis>
+<operator>      ::= "+" | "-" | "*" | "/" | "<" | ">" | "==" | "!=" | "&" | "^" | "|"
+<operator-jedn> ::= "+" | "-" | "~" | "!"
 
 
 
@@ -31,8 +33,22 @@
 <lista-przypisań-str>    ::= <przypisanie-str> <lista-przypisań-str1> | eps
 <lista-przypisań-str1>   ::= "," <przypisanie-str> <lista-przypisań-str1> | eps
 
-<wywolanie-funkcji>      ::= <nazwa> "(" <lista-wyrazen> ")" | <lambda> "(" <lista wyrazen> ")"
-<lista-wyrazen>          ::= <wyrażenie> <lista-wyrazen1> | eps
-<lista-wyrazen1>         ::= "," <wyrażenie> <lista-wyrazen1> |eps
+<wywolanie-funkcji>                ::= <nazwa> "(" <lista-argumentów-wywołania> ")" | <lambda> "(" <lista wyrazen> ")"
+<lista-argumentów-wywołania>       ::= <wyrażenie> <lista-argumentów-wywołania1> | eps
+<lista-argumentów-wywołania>       ::= "," <wyrażenie> <lista-argumentów-wywołania1> |eps
 
+<cyfra>         ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<wielki-znak>   ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+<mały-znak>     ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
+<znak>          ::= <mały-znak> | <wielki-znak>
 
+<nazwa>         ::= <mały-znak> <nazwa1>
+<nazwa1>        ::= <znak> <nazwa1> | eps
+
+<liczba>        ::= <cyfra> <liczba1> | <cyfra> <liczba1> "." <liczba1> | <liczba1> "." <cyfra> <liczba1>
+<liczba1>       ::= <cyfra> <liczba1> | eps
+
+<symbol>        ::= <wielki-znak> <symbol1>
+<symbol1>       ::= <znak> <symbol1> | eps
+
+<napis>         ::= '"' <literał-łańcuchowy> '"'
