@@ -95,10 +95,79 @@
 \section{Specyfikacja gramatyki języka}
 
 \begin{grammar}
- <statement> ::= <ident> `=' <expr>
-	\alt `for' <ident> `=' <expr> `to' <expr> `do' <statement>
-	\alt `{' <stat-list> `}'
-	\alt <empty> 
+<program>       ::= <instrukcja> <separator> <program> | <instrukcja> | $\varepsilon$
+
+<instrukcja>    ::= <definicja> | <wyrażenie>
+
+<definicja>     ::= <przypisanie> | <skrót-funkcji>
+
+<przypisanie>   ::= <lwartość> `=' <wyrażenie>
+
+<skrót-funkcji> ::= `@' <nazwa> <lambda>
+
+<funkcja>       ::= <nazwa> <lambda> | <lambda>
+
+<lambda>        ::= `[' <lista-arg> `->' <lista-def> <wyrażenie> `]'
+
+<lista-arg>     ::= <nazwa> <lista-arg1> | $\varepsilon$
+
+<lista-arg1>    ::= `,' <nazwa> <lista-arg1> | $\varepsilon$
+
+<lista-def>     ::= <definicja> <lista-def1> | $\varepsilon$
+
+<lista-def1>    ::= <separator> <definicja> <lista-def1> | $\varepsilon$
+
+
+<separator>     ::= `\\n' | `;'
+
+<wyrażenie>     ::= <struktura> | <funkcja> | <symbol> | <liczba> | <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <napis>
+
+<operator>      ::= `+' | `-' | `*' | `/' | `<' | `>' | `==' | `!=' | `&' | `^' | `|'
+
+<operator-jedn> ::= `+' | `-' | `~' | `!'
+
+
+
+<lwartość>      ::= <nazwa> <lwartość1>
+
+<lwartość1>		::= `.' <nazwa> <lwartość1> | $\varepsilon$
+
+<struktura>              ::= `{' <lista-przypisań-str> `}'
+
+<przypisanie-str>        ::= <lwartość> `:' <wyrażenie>
+
+<lista-przypisań-str>    ::= <przypisanie-str> <lista-przypisań-str1> | $\varepsilon$
+
+<lista-przypisań-str1>   ::= `,' <przypisanie-str> <lista-przypisań-str1> | $\varepsilon$
+
+<wywolanie-funkcji>                ::= <nazwa> `(' <lista-argumentów-wywołania> `)' | <lambda> `(' <lista wyrazen> `)'
+
+<lista-argumentów-wywołania>       ::= <wyrażenie> <lista-argumentów-wywołania1> | $\varepsilon$
+
+<lista-argumentów-wywołania>       ::= `,' <wyrażenie> <lista-argumentów-wywołania1> |$\varepsilon$
+
+<cyfra>         ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9'
+
+<wielki-znak>   ::= `A' | `B' | `C' | `D' | `E' | `F' | `G' | `H' | `I' | `J' | `K' | `L' | `M' | `N' | `O' | `P' | `Q' | `R' | `S' | `T' | `U' | `V' | `W' | `X' | `Y' | `Z'
+
+<mały-znak>     ::= `a' | `b' | `c' | `d' | `e' | `f' | `g' | `h' | `i' | `j' | `k' | `l' | `m' | `n' | `o' | `p' | `q' | `r' | `s' | `t' | `u' | `v' | `w' | `x' | `y' | `z'
+
+<znak>          ::= <mały-znak> | <wielki-znak>
+
+<nazwa>         ::= <mały-znak> <nazwa1>
+
+<nazwa1>        ::= <znak> <nazwa1> | $\varepsilon$
+
+<liczba>        ::= <cyfra> <liczba1> | <cyfra> <liczba1> `.' <liczba1> | <liczba1> `.' <cyfra> <liczba1>
+
+<liczba1>       ::= <cyfra> <liczba1> | $\varepsilon$
+
+<symbol>        ::= <wielki-znak> <symbol1>
+
+<symbol1>       ::= <znak> <symbol1> | $\varepsilon$
+
+<napis>         ::= ```' <literał-łańcuchowy> ```'
+
 \end{grammar}
 
 
