@@ -135,7 +135,7 @@ Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość 
 Wyrażenie warunkowe ma postać \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
 
 \subsection{Funkcje}
-Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <przypisanie>,<przypisanie>,..., <wyrażenie>]}.
+Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
 Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
@@ -193,6 +193,10 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 <operator>      ::= `+' | `-' | `*' | `/' | `<' | `>' | `==' | `!=' | `&' | `^' | `|'
 
 <operator-jedn> ::= `+' | `-' | `~' | `!'
+
+\vskip 0.5cm
+
+<instrukcja-warunkowa> ::= `if' <wyrażenie> `then' <wyrażenie> `else' <wyrażenie>
 
 \vskip 0.5cm
 
