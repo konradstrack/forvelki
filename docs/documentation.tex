@@ -139,9 +139,9 @@ Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <przy
 Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
-Osiąga się to przez umieszczenie nazwy przez ciałem funkcji.
+Osiąga się to przez umieszczenie nazwy przed ciałem funkcji.
 Nazwa jest pojedynczym słowem pisanym z małej litery.
-Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n -> prog=1, if n <= prog then 1 else n*silnia(n-1)]}.
+Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n -> prog=1; if n <= prog then 1 else n*silnia(n-1)]}.
 Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
 
 \subsection{Domknięcia}
@@ -154,7 +154,7 @@ Kolejność wyliczania wartości w obrębie funkcji jest zgodna z~kolejnością 
 
 
 \subsection{Wejście/wyjście}
-Dostępna jest funkcja \texttt{write[x->x]}, która ma efekt uboczny - wypisanie argumentu na standardowe.
+Dostępna jest funkcja \texttt{write[x->x]}, która ma efekt uboczny - wypisanie argumentu na standardowe wyjście.
 Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \section{Specyfikacja gramatyki języka}
