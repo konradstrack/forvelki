@@ -94,7 +94,7 @@
 
 \subsection{Wprowadzenie}
 Forvelki to interpretowany, silnie i dynamicznie typowany język funkcyjny o w pełni leniwym wartościowaniu.
-Funkcje są wartościami pierwszej klasy i mogą być definiowane anonimowe.
+Funkcje są wartościami pierwszej klasy i istnieje możliwość definiowania funkcji anonimowych.
 Język wspiera mechanizm domknięć.
 Wyposażony jest w automatyczne zarządzanie pamięcią.
 Umożliwia dynamiczne tworzenie pól struktur.
@@ -132,10 +132,11 @@ Gdy zmienna jest związana ze strukturą, można modyfikować jej zawartość po
 Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość jeszcze nie istnieje.
 
 \subsection{Wyrażenie warunkowe}
-Wyrażenie warunkowe ma postać \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
+Wyrażenie warunkowe ma postać:
+\texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
 
 \subsection{Funkcje}
-Funkcje anonimowe są defiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
+Funkcje anonimowe są definiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
 Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
@@ -188,7 +189,7 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \vskip 0.5cm
 
-<wyrażenie>     ::= <struktura> | <funkcja> | <symbol> | <liczba> | <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <napis>
+<wyrażenie>     ::= <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <wyrażenie> `.' <lwartość> | <struktura> | <funkcja> | <napis> | <symbol> | <liczba>
 
 <operator>      ::= `+' | `-' | `*' | `/' | `<' | `>' | `==' | `!=' | `&' | `^' | `|'
 
