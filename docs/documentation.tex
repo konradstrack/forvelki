@@ -109,7 +109,7 @@ Przykładowy kod wypisujący na ekran napis \emph{hello, world} wygląda następ
 
 
 \subsection{Struktura kodu źródłowego}
-Kod źródłowy programu w języku Forvelki składa się z ciągu instrukcji przypisania oraz wyrażeń rozdzielonych znakami nowej linii bądź średnikami.
+Kod źródłowy programu w języku Forvelki składa się z ciągu instrukcji przypisania oraz wyrażeń rozdzielonych literaami nowej linii bądź średnikami.
 Wyrażenia są ewaluowane i~wypisywane na ekran.
 Instrukcje przypisań do zmiennych modyfikują środowisko, którego używają wyrażenia.
 Mają postać \texttt{<zmienna>~=~<wartość>}.
@@ -189,11 +189,11 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \vskip 0.5cm
 
-<wyrażenie>     ::= <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <wyrażenie> `.' <lwartość> | <struktura> | <funkcja> | <napis> | <symbol> | <liczba>
+<wyrażenie>     ::= <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <wyrażenie> `.' <lwartość> | <instrukcja-warunkowa> | <struktura> | <funkcja> | <napis> | <symbol> | <liczba>
 
-<operator>      ::= `+' | `-' | `*' | `/' | `<' | `>' | `==' | `!=' | `&' | `^' | `|'
+<operator>      ::= `+' | `-' | `*' | `/' | `<' | `>' | `==' | `!=' | `<=' | `>='
 
-<operator-jedn> ::= `+' | `-' | `~' | `!'
+<operator-jedn> ::= `+' | `-' | `!'
 
 \vskip 0.5cm
 
@@ -225,27 +225,29 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 <cyfra>         ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9'
 
-<wielki-znak>   ::= `A' | `B' | `C' | `D' | `E' | `F' | `G' | `H' | `I' | `J' | `K' | `L' | `M' | `N' | `O' | `P' | `Q' | `R' | `S' | `T' | `U' | `V' | `W' | `X' | `Y' | `Z'
+<wielka-litera>   ::= `A' | `B' | `C' | `D' | `E' | `F' | `G' | `H' | `I' | `J' | `K' | `L' | `M' | `N' | `O' | `P' | `Q' | `R' | `S' | `T' | `U' | `V' | `W' | `X' | `Y' | `Z'
 
-<mały-znak>     ::= `a' | `b' | `c' | `d' | `e' | `f' | `g' | `h' | `i' | `j' | `k' | `l' | `m' | `n' | `o' | `p' | `q' | `r' | `s' | `t' | `u' | `v' | `w' | `x' | `y' | `z'
+<mała-litera>     ::= `a' | `b' | `c' | `d' | `e' | `f' | `g' | `h' | `i' | `j' | `k' | `l' | `m' | `n' | `o' | `p' | `q' | `r' | `s' | `t' | `u' | `v' | `w' | `x' | `y' | `z'
 
 \vskip 0.5cm
 
-<znak>          ::= <mały-znak> | <wielki-znak>
+<litera>          ::= <mała-litera> | <wielka-litera>
 
-<nazwa>         ::= <mały-znak> <nazwa1>
+<nazwa>         ::= <mała-litera> <nazwa1>
 
-<nazwa1>        ::= <znak> <nazwa1> | $\varepsilon$
+<nazwa1>        ::= <litera> <nazwa1> | <cyfra> <nazwa1> | $\varepsilon$
 
 <liczba>        ::= <cyfra> <liczba1> | <cyfra> <liczba1> `.' <liczba1> | <liczba1> `.' <cyfra> <liczba1>
 
 <liczba1>       ::= <cyfra> <liczba1> | $\varepsilon$
 
-<symbol>        ::= <wielki-znak> <symbol1>
+<symbol>        ::= <wielki-litera> <symbol1>
 
-<symbol1>       ::= <znak> <symbol1> | $\varepsilon$
+<symbol1>       ::= <litera> <symbol1> | $\varepsilon$
 
 <napis>         ::= ```' <literał-łańcuchowy> ```'
+
+<znak>			::= ``''' <znak-ascii> ``'''
 
 \end{grammar}
 
