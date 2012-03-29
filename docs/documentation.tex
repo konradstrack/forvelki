@@ -130,14 +130,19 @@ Do pól można odwoływać się przez operator kropki, np. \texttt{\{x:1,~y:2\}.
 Gdy zmienna jest związana ze strukturą, można modyfikować jej zawartość poprzez przypisania do pól.
 Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość jeszcze nie istnieje.
 
-
 Znaki muszą być ujęte w pojedyncze cudzysłowy, np.~\texttt{'a'}
 Napisy natomiast w podwójne cudzysłowy, np.~\texttt{''raz dwa trzy''}.
 Napis jest reprezentowany jako struktura \texttt{\{hd:<pierwszy-znak>,~tl:<reszta-napisu>\}}, przy czym napis pusty \texttt{''''} jako identyfikator \texttt{Null}.
 
+Język jest silnie typowany i nie ma możliwości rzutowania typów.
+Na liczbach można wykonywać wszystkie operacje arytmetyczne zdefiniowane w gramatyce oraz operacje porównania.
+Na typie logicznym można wykonywać operację negacji \texttt{!}.
+Na wszystkich typach można dokonywać operacji porównania \texttt{==} i \texttt{!=}.
+
 \subsection{Wyrażenie warunkowe}
 Wyrażenie warunkowe ma postać:
 \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
+Przy czym \texttt{<warunek>} musi być wyrażeniem typu logicznego.
 
 \subsection{Funkcje}
 Funkcje anonimowe są definiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
