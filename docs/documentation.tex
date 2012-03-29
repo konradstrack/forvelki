@@ -118,9 +118,8 @@ Związane zmienne mogą mieć ponownie przypisaną wartość.
 
 
 \subsection{Typy danych}
-Język Forvelki obsługuje następujące typy danych: liczby całkowie, liczby zmiennoprzecinkowe, napisy, typ logiczny, struktury oraz identyfikatory.
+Język Forvelki obsługuje następujące typy danych: liczby całkowie, liczby zmiennoprzecinkowe, znaki, napisy, typ logiczny, struktury oraz identyfikatory.
 Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np.~\texttt{3.14}.
-Napisy muszą być ujęte w podwójne cudzysłowy, np. \texttt{''raz dwa trzy''}.
 Identyfikatory to słowa pisane z wielkiej litery.
 Przy porównaniu dwa identyfikatory są równe wtedy i tylko wtedy, gdy są takimi samymi słowami.
 Z typem logicznym związane są dwa identyfikatory, \texttt{True} i \texttt{False}, które oznaczają odpowiednio prawdę i fałsz.
@@ -131,13 +130,18 @@ Do pól można odwoływać się przez operator kropki, np. \texttt{\{x:1,~y:2\}.
 Gdy zmienna jest związana ze strukturą, można modyfikować jej zawartość poprzez przypisania do pól.
 Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość jeszcze nie istnieje.
 
+
+Znaki muszą być ujęte w pojedyncze cudzysłowy, np.~\texttt{'a'}
+Napisy natomiast w podwójne cudzysłowy, np.~\texttt{''raz dwa trzy''}.
+Napis jest reprezentowany jako struktura \texttt{\{hd:<pierwszy-znak>,~tl:<reszta-napisu>\}}, przy czym napis pusty \texttt{''''} jako identyfikator \texttt{Null}.
+
 \subsection{Wyrażenie warunkowe}
 Wyrażenie warunkowe ma postać:
 \texttt{if <warunek> then <wyrażenie> else <wyrażenie>}.
 
 \subsection{Funkcje}
 Funkcje anonimowe są definiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
-Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y -> x+y]}.
+Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y~->~x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
 Osiąga się to przez umieszczenie nazwy przed ciałem funkcji.
