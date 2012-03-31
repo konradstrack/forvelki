@@ -13,7 +13,7 @@ tokens = [
 	'INTO', 'SEPARATOR', #'SHORTCUT', 'ASSIGN', 'COLON', 'COMMA',  
 	'INTEGER', 'FLOAT', 'CHAR', 'STRING', 'IDENTIFIER', # literals
 #	'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'NEGATE', # operators
-	'COMP_EQU', 'COMP_UNEQU', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
+	'COMP_EQ', 'COMP_NEQ', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
 #	'IF', 'THEN', 'ELSE', # conditional instruction
 #	'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LSQBRACKET', 'RSQBRACKET', # brackets
 	'COMMENT', 'NAME',
@@ -24,8 +24,8 @@ literals = '@=,:+-*/!()[]{}' # only single-character
 t_ignore = ' \t'
 
 t_INTO = r'->'
-t_COMP_EQU = r'=='
-t_COMP_UNEQU = r'!='
+t_COMP_EQ = r'=='
+t_COMP_NEQ = r'!='
 t_COMP_LT = r'<'
 t_COMP_GT = r'>'
 t_COMP_LE = r'<='
@@ -58,11 +58,11 @@ def t_STRING(t): # todo
 def t_IDENTIFIER(t): # todo
 	r'[A-Z][A-Za-z0-9]*'
 	return t
-    
+
 def t_NAME(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'NAME')    # Check for reserved words
-    return t
+	r'[a-zA-Z_][a-zA-Z_0-9]*'
+	t.type = reserved.get(t.value, 'NAME')    # Check for reserved words
+	return t
 
 lexer = lex.lex()
 
