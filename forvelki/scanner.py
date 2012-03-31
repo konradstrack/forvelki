@@ -38,14 +38,14 @@ def t_SEPARATOR(t):
 	t.lexer.lineno += t.value.count('\n')
 	return t
 
-def t_INTEGER(t):
-	r'\d+'
-	t.value = int(t.value)
-	return t
-
 def t_FLOAT(t):
 	r'\d+\.\d+'
 	t.value = float(t.value)
+	return t
+
+def t_INTEGER(t):
+	r'\d+'
+	t.value = int(t.value)
 	return t
 
 def t_CHAR(t): # todo
