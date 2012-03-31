@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import ply.lex as lex
+
 reserved = {
 	"if" : 'IF',
 	"then" : 'THEN',
@@ -62,15 +64,15 @@ def t_NAME(t):
     t.type = reserved.get(t.value, 'NAME')    # Check for reserved words
     return t
 
+lexer = lex.lex()
 
 if __name__ == '__main__':
-	import ply.lex as lex
+	
 	source = """
 	x = 2 + 3 * 4
 	@fun[x,y -> x+y]
 	"""
 	
-	lexer = lex.lex()
 	lexer.input(source)
 	for token in lexer:
 		print token
