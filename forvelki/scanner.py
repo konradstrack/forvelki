@@ -15,7 +15,7 @@ tokens = [
 #	'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'NEGATE', # operators
 	'COMP_EQ', 'COMP_NEQ', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
 #	'IF', 'THEN', 'ELSE', # conditional instruction
-#	'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LSQBRACKET', 'RSQBRACKET', # brackets
+	'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LSQBRACKET', 'RSQBRACKET', # brackets
 	'COMMENT', 'NAME',
 ] + list(reserved.values())
 
@@ -30,6 +30,13 @@ t_COMP_LT = r'<'
 t_COMP_GT = r'>'
 t_COMP_LE = r'<='
 t_COMP_GE = r'>='
+
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACE = r'{'
+t_RBRACE = r'}'
+t_LSQBRACKET = r'\['
+t_RSQBRACKET = r'\]'
 
 t_ignore_COMMENT = r'\#.*'
 

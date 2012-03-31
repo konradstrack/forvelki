@@ -11,3 +11,12 @@ class TestLexer(unittest.TestCase):
         
         expected = ['INTEGER', 'COMP_LT', 'FLOAT']
         self.assertListEqual(expected, tokens)
+        
+    def test_brackets(self):
+        source = "[{}]()"
+        
+        lexer.input(source)
+        tokens = [token.type for token in lexer]
+        
+        expected = ['LSQBRACKET', 'LBRACE', 'RBRACE', 'RSQBRACKET', 'LPAREN', 'RPAREN']
+        self.assertListEqual(expected, tokens)
