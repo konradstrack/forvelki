@@ -12,7 +12,7 @@ reserved = {
 tokens = [
 	'INTO', 'SEPARATOR', #'SHORTCUT', 'ASSIGN', 'COLON', 'COMMA',  
 	'INTEGER', 'FLOAT', 'CHAR', 'STRING', 'IDENTIFIER', # literals
-#	'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'NEGATE', # operators
+	'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'NEGATE', # operators
 	'COMP_EQ', 'COMP_NEQ', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
 #	'IF', 'THEN', 'ELSE', # conditional instruction
 	'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LSQBRACKET', 'RSQBRACKET', # brackets
@@ -22,6 +22,12 @@ tokens = [
 literals = '@=,:+-*/!()[]{}' # only single-character
 
 t_ignore = ' \t'
+
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_MULTIPLY = r'\*'
+t_DIVIDE = r'/'
+t_NEGATE = r'!'
 
 t_INTO = r'->'
 t_COMP_EQ = r'=='

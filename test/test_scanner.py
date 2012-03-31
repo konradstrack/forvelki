@@ -20,3 +20,12 @@ class TestLexer(unittest.TestCase):
         
         expected = ['LSQBRACKET', 'LBRACE', 'RBRACE', 'RSQBRACKET', 'LPAREN', 'RPAREN']
         self.assertListEqual(expected, tokens)
+        
+    def test_operators(self):
+        source = "!+*-/"
+        
+        lexer.input(source)
+        tokens = [token.type for token in lexer]
+        
+        expected = ['NEGATE', 'PLUS', 'MULTIPLY', 'MINUS', 'DIVIDE']
+        self.assertListEqual(expected, tokens)
