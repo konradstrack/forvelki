@@ -1,8 +1,9 @@
 import unittest
-import forvelki.conditional as conditional
-import forvelki.operators as operators
+import forvelki.tree.conditional as conditional
+import forvelki.tree.operators as operators
 from forvelki.parser import parser
-
+from collections import deque
+from forvelki.program import program
 
 class TestParser(unittest.TestCase):
 	
@@ -11,20 +12,21 @@ class TestParser(unittest.TestCase):
 		
 		result = parser.parse(source)
 
-		self.assertEqual(operators.add, type(result))
-		self.assertEqual(operators.multiply, type(result.v1))
+		self.assertEqual(operators.add, type(result[0]))
+		self.assertEqual(operators.multiply, type(result[0].v1))
 
 	def test_arithmetic_repr(self):
 		source = "5*4+3-2/1;"
 		
-		expected = "5 * 4 + 3 - 2 / 1;"
+		expected = '5 * 4 + 3 - 2 / 1'
+		
 		result = parser.parse(source)
 		
-		self.assertEqual(expected, repr(result))
+		self.assertEqual(expected, repr(result[0]))
 
 	def test_conditional_expression(self):
 		source = "if 4 then 50 else 60;"
 		
 		result = parser.parse(source)
-		self.assertEqual(conditional.conditional, type(result))
-		self.assertEqual("if 4 then 50 else 60", repr(result))
+		self.assertEqual(conditional.conditional, type(result[0]))
+		self.assertEqual("if(4) then(50) else(60)", repr(result[0]))

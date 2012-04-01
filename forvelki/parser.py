@@ -4,8 +4,8 @@ import ply.yacc as yacc
 import scanner
 
 import program
-import conditional
-import operators
+import tree.conditional as conditional
+import tree.operators as operators
 
 tokens = scanner.tokens
 
