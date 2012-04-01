@@ -7,6 +7,7 @@ tokens = scanner.tokens
 precedence = (
 			('left', 'PLUS', 'MINUS'),
 			('left', 'DIVIDE', 'MULTIPLY'),
+			('nonassoc', 'NEGATE')
 )
 
 def p_expr(p):
@@ -30,13 +31,17 @@ def p_expression_divide(p):
 	'''expr : expr DIVIDE expr'''
 	p[0] = datatype.divide(p[1], p[3])
 	
+def p_negate(p):
+	'''expr : NEGATE expr'''
+	p[0] = datatype.negate(p[2])
+	
 def p_error(t):
 	print "Syntax error at '%s'" % t.value
 
 parser = yacc.yacc()
 
 if __name__ == '__main__':
-	source = "5 * 4 - 3 + 2 / 1"
+	source = "5 * 4 - 3 + 2 / !1"
 	
 	result = parser.parse(source)
 	print result

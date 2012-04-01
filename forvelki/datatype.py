@@ -46,3 +46,10 @@ class divide(object):
 		
 	def __repr__(self):
 		return "{0} / {1}".format(self.v1, self.v2)
+	
+class negate(object):
+	def __init__(self, value):
+		self.value = value
+		
+	def __repr__(self):
+		return "!({0})".format(self.value)
