@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import datatype
 
 reserved = {
 	"if" : 'IF',
@@ -36,25 +37,28 @@ def t_SEPARATOR(t):
 	t.lexer.lineno += t.value.count('\n')
 	return t
 
-def t_INTEGER(t):
-	r'\d+'
-	t.value = int(t.value)
-	return t
-
 def t_FLOAT(t):
 	r'\d+\.\d+'
 	t.value = float(t.value)
 	return t
 
-def t_CHAR(t): # todo
-	r"'.*'"
+def t_INTEGER(t):
+	r'\d+'
+	t.value = int(t.value)
+	return t
+
+def t_CHAR(t):
+	r"'.'"
+	t.value = datatype.char(t.value[1])
+	return t
 	
-def t_STRING(t): # todo
+def t_STRING(t):
 	r'".*"'
 	return t
 
-def t_IDENTIFIER(t): # todo
-	r'[A-Z][A-Za-z0-9]*'
+def t_IDENTIFIER(t):
+	r'[A-Z][A-Za-z0-9_]*'
+	t.value = datatype.identifier(t.value)
 	return t
     
 def t_NAME(t):
@@ -62,12 +66,20 @@ def t_NAME(t):
     t.type = reserved.get(t.value, 'NAME')    # Check for reserved words
     return t
 
+def t_error(t):
+    print "Illegal character '%s'" % t.value[0]
+    t.lexer.skip(1)
 
 if __name__ == '__main__':
 	import ply.lex as lex
 	source = """
 	x = 2 + 3 * 4
 	@fun[x,y -> x+y]
+	4.4
+	'a'?
+	"abc"
+	"dupa" #comment
+	Masterczulki
 	"""
 	
 	lexer = lex.lex()
