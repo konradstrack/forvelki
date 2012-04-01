@@ -19,3 +19,10 @@ class TestParser(unittest.TestCase):
 		result = parser.parse(source)
 		
 		self.assertEqual(expected, repr(result))
+
+	def test_conditional_expression(self):
+		source = "if 4 then 50 else 60"
+		
+		result = parser.parse(source)
+		self.assertEqual(datatype.conditional, type(result))
+		self.assertEqual("if 4 then 50 else 60", repr(result))

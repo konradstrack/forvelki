@@ -5,6 +5,7 @@ import datatype
 tokens = scanner.tokens
 
 precedence = (
+			('left', 'ELSE'),
 			('left', 'PLUS', 'MINUS'),
 			('left', 'DIVIDE', 'MULTIPLY'),
 			('nonassoc', 'NEGATE')
@@ -12,8 +13,11 @@ precedence = (
 
 def p_expr(p):
 	'''expr : FLOAT
-			| INTEGER'''
+			| INTEGER
+			| conditional'''
 	p[0] = p[1]
+	
+# arithmetic
 
 def p_expression_plus(p):
 	'''expr : expr PLUS expr'''
@@ -35,13 +39,22 @@ def p_negate(p):
 	'''expr : NEGATE expr'''
 	p[0] = datatype.negate(p[2])
 	
+# conditional expressions
+
+def p_conditional(p):
+	'''conditional : IF expr THEN expr ELSE expr'''
+	p[0] = datatype.conditional(p[2], p[4], p[6])
+	
+# errors
+	
 def p_error(t):
 	print "Syntax error at '%s'" % t.value
+	
 
 parser = yacc.yacc()
 
 if __name__ == '__main__':
-	source = "5 * 4 - 3 + 2 / !1"
+	source = """if 0 then if 0 then 5 * 4 - 3 + 2 / !1 else 4 else if 1 then 2 else 3"""
 	
 	result = parser.parse(source)
 	print result
