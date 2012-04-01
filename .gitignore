@@ -1,2 +1,9 @@
 docs/documentation.*
+
 forvelki/*.pyc
+forvelki/parsetab.py
+forvelki/parser.out
+
+test/*.pyc
+test/parsetab.py
+test/parser.out
