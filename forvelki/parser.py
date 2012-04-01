@@ -6,9 +6,9 @@ tokens = scanner.tokens
 
 precedence = (
 			('left', 'ELSE'),
-			('left', 'PLUS', 'MINUS'),
-			('left', 'DIVIDE', 'MULTIPLY'),
-			('nonassoc', 'NEGATE')
+			('left', '+', '-'),
+			('left', '/', '*'),
+			('nonassoc', '!')
 )
 
 def p_expr(p):
@@ -20,23 +20,23 @@ def p_expr(p):
 # arithmetic
 
 def p_expression_plus(p):
-	'''expr : expr PLUS expr'''
+	'''expr : expr '+' expr'''
 	p[0] = datatype.add(p[1], p[3])
 
 def p_expression_minus(p):
-	'''expr : expr MINUS expr'''
+	'''expr : expr '-' expr'''
 	p[0] = datatype.subtract(p[1], p[3])
 	
 def p_expression_multiply(p):
-	'''expr : expr MULTIPLY expr'''
+	'''expr : expr '*' expr'''
 	p[0] = datatype.multiply(p[1], p[3])
 
 def p_expression_divide(p):
-	'''expr : expr DIVIDE expr'''
+	'''expr : expr '/' expr'''
 	p[0] = datatype.divide(p[1], p[3])
 	
 def p_negate(p):
-	'''expr : NEGATE expr'''
+	'''expr : '!' expr'''
 	p[0] = datatype.negate(p[2])
 	
 # conditional expressions
