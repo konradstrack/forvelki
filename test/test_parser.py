@@ -1,9 +1,8 @@
 import unittest
-import forvelki.tree.conditional as conditional
-import forvelki.tree.operators as operators
+import forvelki.expression.conditional as conditional
+import forvelki.expression.operators as operators
 from forvelki.parser import parser
-from collections import deque
-from forvelki.program import program
+
 
 class TestParser(unittest.TestCase):
 	

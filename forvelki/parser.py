@@ -3,9 +3,10 @@
 import ply.yacc as yacc
 import scanner
 
-import program
-import tree.conditional as conditional
-import tree.operators as operators
+
+import expression.conditional as conditional
+import expression.operators as operators
+from program import assignment, program
 
 tokens = scanner.tokens
 
@@ -18,16 +19,35 @@ precedence = (
 
 def p_program(p): 
 	'''program : instruction SEPARATOR program'''
-	p[3].appendleft(p[1])
+	if p[1] is not None:
+		p[3].appendleft(p[1])
 	p[0] = p[3]
 
 def p_program_empty(p):
 	'''program : '''
-	p[0] = program.program()
+	p[0] = program()
 
 def p_instruction(p):
-	'''instruction : expr'''
-	p[0] = p[1] # TODO: this is a mock
+	'''instruction : expr 
+				   | assignment'''
+	p[0] = p[1]
+
+def p_instruction_empty(p):
+	'''instruction : '''
+	p[0] = None
+
+
+
+# assignments
+def p_assignment_normal(p):
+	'''assignment : NAME '=' expr'''
+	p[0] = assignment(p[1], p[3])
+
+#def p_assignment_function_shortcut(p): # TODO: later
+#	'''assignment : '@' NAME lambda '''
+#	p[0] = assignment()
+
+
 
 def p_expr(p):
 	'''expr : FLOAT
@@ -72,7 +92,12 @@ def p_error(t):
 parser = yacc.yacc()
 
 if __name__ == '__main__':
-	source = """if 0 then if 0 then 5 * 4 - 3 + 2 / !1 else 4 else if 1 then 2 else 3; 6;"""
+	source = """
+		if 0 then if 0 then 5 * 4 - 3 + 2 / !1 else 4 else if 1 then 2 else 3
+		6
+		x=5
+	"""
 	
-	result = parser.parse(source)
-	print result
+	pgrm = parser.parse(source)
+	print pgrm
+	

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import tree.datatype as datatype
+import expression.datatype as datatype
 
 import ply.lex as lex
 

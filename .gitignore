@@ -1,11 +1,10 @@
 docs/documentation.*
 
-forvelki/*.pyc
-forvelki/parsetab.py
-forvelki/parser.out
+*/*.pyc
 
-test/*.pyc
-test/parsetab.py
-test/parser.out
+*/parsetab.py
+*/parser.out
+parsetab.py
+parser.out
 
 .*
