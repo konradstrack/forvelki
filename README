@@ -1,0 +1,3 @@
+Forvelki is an interpreted, strongly and dynamically typed functional language with fully lazy evaluation.
+
+This is an first implementation of Forvelki interpeter.
