@@ -4,9 +4,10 @@ import ply.yacc as yacc
 import scanner
 
 
-import expression.conditional as conditional
 import expression.operators as operators
 from program import assignment, program
+from expression.misc import variable, conditional
+from expression.datatype import integer, floating
 
 tokens = scanner.tokens
 
@@ -48,12 +49,21 @@ def p_assignment_normal(p):
 #	p[0] = assignment()
 
 
+def p_expr_variable(p):
+	'''expr : NAME'''
+	p[0] = variable(p[1])
 
-def p_expr(p):
-	'''expr : FLOAT
-			| INTEGER
-			| conditional'''
-	p[0] = p[1]
+def p_expr_conditional(p):
+	'''expr : IF expr THEN expr ELSE expr'''
+	p[0] = conditional(p[2], p[4], p[6])
+
+def p_expr_int(p):
+	'''expr : INTEGER'''
+	p[0] = integer(p[1]) #TODO: error handling
+
+def p_expr_float(p):
+	'''expr : FLOAT'''
+	p[0] = floating(p[1]) #TODO: error handling
 	
 # arithmetic
 
@@ -77,11 +87,6 @@ def p_negate(p):
 	'''expr : '!' expr'''
 	p[0] = operators.negate(p[2])
 	
-# conditional expressions
-
-def p_conditional(p):
-	'''conditional : IF expr THEN expr ELSE expr'''
-	p[0] = conditional.conditional(p[2], p[4], p[6])
 	
 # errors
 	
@@ -93,11 +98,16 @@ parser = yacc.yacc()
 
 if __name__ == '__main__':
 	source = """
-		if 0 then if 0 then 5 * 4 - 3 + 2 / !1 else 4 else if 1 then 2 else 3
-		6
 		x=5
+		y=3.14
+		if x-x then y else x+y
+		x=2
+		x*y
 	"""
 	
 	pgrm = parser.parse(source)
 	print pgrm
+	print
+	for result in pgrm.execute():
+		print result, type(result)
 	
