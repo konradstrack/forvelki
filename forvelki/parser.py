@@ -3,11 +3,10 @@
 import ply.yacc as yacc
 import scanner
 
-
+from collections import deque
 import expression.operators as operators
 from program import assignment, program
 from expression.misc import variable, conditional
-from expression.datatype import integer, floating
 
 tokens = scanner.tokens
 
@@ -39,6 +38,7 @@ def p_instruction_empty(p):
 
 
 
+
 # assignments
 def p_assignment_normal(p):
 	'''assignment : NAME '=' expr'''
@@ -48,6 +48,47 @@ def p_assignment_normal(p):
 #	'''assignment : '@' NAME lambda '''
 #	p[0] = assignment()
 
+
+
+def p_assignment_list_empty(p):
+	'''assignment_list : '''
+	p[0] = deque([])
+
+def p_assignment_list_normal(p):
+	'''assignment_list : assignment SEPARATOR assignment_list'''
+	p[3].appendleft(p[1])
+	p[0] = p[3]	
+
+
+# functions
+def p_args_list_empty(p):
+	'''args_list : '''
+	p[0] = deque([])
+
+def p_args_list_normal(p):
+	'''args_list : NAME rest_args_list'''
+	p[2].append(p[1])
+	p[0] = p[2]
+
+def p_rest_args_list_empty(p):
+	'''rest_args_list : '''
+	p[0] = deque([])
+
+def p_rest_args_list_normal(p):
+	'''rest_args_list : ',' NAME rest_args_list'''
+	p[3].append(p[2])
+	p[0] = p[3]
+
+def p_function_lambda(p):
+	'''function : '[' args_list INTO assignment_list expr ']' '''
+	p[0] = p[1]
+	
+#def p_function_named(p): TODO:
+
+
+# expressions
+def p_expr_function(p):
+	'''expr : '[' args_list INTO expr '''
 
 def p_expr_variable(p):
 	'''expr : NAME'''
@@ -59,11 +100,11 @@ def p_expr_conditional(p):
 
 def p_expr_int(p):
 	'''expr : INTEGER'''
-	p[0] = integer(p[1]) #TODO: error handling
+	p[0] = p[1]
 
 def p_expr_float(p):
 	'''expr : FLOAT'''
-	p[0] = floating(p[1]) #TODO: error handling
+	p[0] = p[1]
 	
 # arithmetic
 
@@ -96,12 +137,14 @@ def p_error(t):
 
 parser = yacc.yacc()
 
+# TODO: integer+integer=int :(
 if __name__ == '__main__':
 	source = """
 		x=5
-		y=3.14
-		if x-x then y else x+y
+		z=x
 		x=2
+		y=3
+		if z-z then y else z+y
 		x*y
 	"""
 	

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from collections import deque
+from expression.misc import needs, evaluate
 
 # program is a list of instructions (assignment or expression)
 class program(deque):
@@ -20,6 +21,7 @@ class assignment(object):
 	def __init__(self, name, value):
 		self.name = name
 		self.value = value
+		self.needs = needs(value)
 	
 	def __repr__(self):
 		return "assignment(%s = %s)" % (self.name, str(self.value))
@@ -38,7 +40,7 @@ class closure(object):
 		try:
 			return self._result
 		except AttributeError:
-			self._result = self.expr.evaluate(self.env)
+			self._result = evaluate(self.expr, self.env)
 			return self._result
 		
 #class environ(object):
