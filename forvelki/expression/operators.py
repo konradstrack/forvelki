@@ -18,7 +18,7 @@ class add(binary_operator):
 	
 class subtract(binary_operator):
 	def evaluate(self, env):
-		return evaluate(self.v1, env) - self.v2.evaluate(self.v2, env)
+		return evaluate(self.v1, env) - evaluate(self.v2, env)
 	
 	def __repr__(self):
 		return "{0} - {1}".format(self.v1, self.v2)

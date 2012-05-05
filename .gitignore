@@ -7,5 +7,6 @@ docs/documentation.*
 */parser.out
 parsetab.py
 parser.out
+parsetab.pyc
 
 .*

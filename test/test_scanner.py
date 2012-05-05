@@ -29,3 +29,8 @@ class TestLexer(unittest.TestCase):
         
         expected = ['!', '+', '*', '-', '/']
         self.assertListEqual(expected, tokens)
+        
+    def test_function(self):
+        src = """[x,y->t=1;z+1];"""
+        lexer.input(src)
+        self.assertEquals(14, len(list(lexer)))

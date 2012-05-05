@@ -23,6 +23,9 @@ class assignment(object):
 		self.value = value
 		self.needs = needs(value)
 	
+	def __eq__(self, other):
+		return self.name==other.name and self.value==other.value
+	
 	def __repr__(self):
 		return "assignment(%s = %s)" % (self.name, str(self.value))
 

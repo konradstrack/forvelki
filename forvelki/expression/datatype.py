@@ -37,9 +37,19 @@ class identifier(immediate):
 # functions
 
 class function(object):
-	def __init__(self, args, assigns, expr):
+	def __init__(self, args, assigns, expr, name=None):
 		self.args = args
 		self.assigns = assigns
 		self.expr = expr
+		self.name = name
+		
 		self.needs = needs(expr).union(*map(needs, assigns))
+	
+	def __repr__(self):
+		return "[%s -> %s, %s]"% (str(self.args), str(self.assigns), str(self.expr))
+		
+class call(object):
+	def __init__(self, function, args):
+		self.function = function
+		self.args = args
 		
