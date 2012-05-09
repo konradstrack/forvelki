@@ -36,7 +36,34 @@ class divide(binary_operator):
 													
 	def __repr__(self):
 		return "{0} / {1}".format(self.v1, self.v2)
-	
+
+# boolean
+
+class eq(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) == evaluate(self.v2, env)
+
+class neq(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) != evaluate(self.v2, env)
+
+class lt(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) < evaluate(self.v2, env)
+
+class gt(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) > evaluate(self.v2, env)
+
+class le(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) <= evaluate(self.v2, env)
+
+class ge(binary_operator):
+	def evaluate(self, env):
+		return evaluate(self.v1, env) >= evaluate(self.v2, env)
+
+
 
 # unary
 class unary_operator(object):

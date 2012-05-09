@@ -4,6 +4,7 @@ from collections import deque
 from expression.datatype import function
 from expression.misc import variable, conditional
 from forvelki.expression.datatype import call
+from forvelki.expression.operators import eq, neq, lt, gt, le, ge
 from program import assignment, program
 import expression.operators as operators
 import ply.yacc as yacc
@@ -103,6 +104,27 @@ def p_named_function(p):
 	p[0] = p[2]
 
 
+# expression list for function call
+
+def p_expr_list_empty(p):
+	'''expr_list : '''
+	p[0] = deque([])
+
+def p_expr_list_normal(p):
+	'''expr_list : expr expr_list_tail'''
+	p[2].appendleft(p[1])
+	p[0] = p[2]
+
+def p_expr_list_tail_empty(p):
+	'''expr_list_tail : '''
+	p[0] = deque([])
+
+def p_expr_list_tail_normal(p):
+	'''expr_list_tail : ',' expr expr_list_tail'''
+	p[3].appendleft(p[2])
+	p[0] = p[3]
+
+
 # expressions
 def p_expr_function(p):
 	'''expr : named_function'''
@@ -117,7 +139,7 @@ def p_expr_variable(p):
 	p[0] = variable(p[1])
 
 def p_expr_conditional(p):
-	'''expr : IF expr THEN expr ELSE expr'''
+	'''expr : IF bool_expr THEN expr ELSE expr'''
 	p[0] = conditional(p[2], p[4], p[6])
 
 def p_expr_int(p):
@@ -129,9 +151,8 @@ def p_expr_float(p):
 	p[0] = p[1]
 
 def p_expr_call(p):
-	'''expr : NAME '(' expr ')' '''
+	'''expr : NAME '(' expr_list ')' '''
 	p[0] = call(p[1], p[3])
-	#TODO: need args list
 	
 # arithmetic
 
@@ -158,7 +179,30 @@ def p_expr_negate(p):
 def p_expr_paren(p):
 	'''expr : '(' expr ')' '''
 	p[0] = p[2]
-	
+
+
+# boolean expressions
+def p_bool_expr_eq(p):
+	'''bool_expr : expr COMP_EQ expr'''
+	p[0] = eq(p[1], p[3])
+def p_bool_expr_neq(p):
+	'''bool_expr : expr COMP_NEQ expr'''
+	p[0] = neq(p[1], p[3])
+def p_bool_expr_lt(p):
+	'''bool_expr : expr COMP_LT expr'''
+	p[0] = lt(p[1], p[3])
+def p_bool_expr_gt(p):
+	'''bool_expr : expr COMP_GT expr'''
+	p[0] = gt(p[1], p[3])
+def p_bool_expr_le(p):
+	'''bool_expr : expr COMP_LE expr'''
+	p[0] = le(p[1], p[3])
+def p_bool_expr_ge(p):
+	'''bool_expr : expr COMP_GE expr'''
+	p[0] = ge(p[1], p[3])
+def p_bool_expr_expr(p): #TODO: remove
+	'''bool_expr : expr'''
+	p[0] = p[1]
 	
 # errors
 	

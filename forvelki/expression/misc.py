@@ -14,9 +14,9 @@ class conditional(object):
 
 	def evaluate(self, env):
 		if self.condition.evaluate(env):
-			return self.if_true.evaluate(env)
+			return evaluate(self.if_true, env)
 		else:
-			return self.if_false.evaluate(env)
+			return evaluate(self.if_false, env)
 
 class variable(object):
 	def __init__(self, name):
@@ -27,7 +27,8 @@ class variable(object):
 		return self.name
 
 	def evaluate(self, env):
-		return env[self.name]() # call a closure
+		closure = env[self.name]
+		return closure() # call a closure
 	
 	
 	
@@ -35,6 +36,7 @@ def evaluate(expr, env):
 	try: # if is complex expression
 		return expr.evaluate(env)
 	except AttributeError: # elif is immediate value
+		#print "assuming", expr, "is immediate value"
 		return expr
 
 def needs(expr):

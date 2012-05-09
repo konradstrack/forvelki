@@ -1,4 +1,3 @@
-from collections import deque
 from forvelki.expression.datatype import function
 from forvelki.expression.misc import variable
 from forvelki.parser import parser

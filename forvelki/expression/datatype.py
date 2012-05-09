@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from misc import needs
+from forvelki.program import closure
+from misc import evaluate, needs
 
 class immediate(object):
 	def __init__(self, value):
@@ -44,12 +45,37 @@ class function(object):
 		self.name = name
 		
 		self.needs = needs(expr).union(*map(needs, assigns))
+		for arg in args:
+			self.needs.discard(arg)
+	
+	def call(self, env):
+		#TODO: assigns
+		return evaluate(self.expr, env)
 	
 	def __repr__(self):
 		return "[%s -> %s, %s]"% (str(self.args), str(self.assigns), str(self.expr))
 		
 class call(object):
-	def __init__(self, function, args):
-		self.function = function
-		self.args = args
+	def __init__(self, function_name, act_args):
+		self.function_name = function_name
+		self.act_args = act_args
+		
+		self.needs = set().union(*map(needs, act_args))
+		
+	def evaluate(self, env):
+		function = env[self.function_name]()
+		assert len(self.act_args) == len(function.args) #TODO: some better exception
+		
+		env = dict(env)
+		env.update(zip(function.args, map(lambda a: closure(a, env), self.act_args)))
+		if function.name:
+			env[function.name] = closure(function, env)
+		
+		#print "evaluating function with env =", env
+		
+		return function.call(env)
+		
+		
+	def __repr__(self):
+		return "%s(%s)"%(self.function_name, ','.join(map(str, self.act_args)))
 		

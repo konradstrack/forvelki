@@ -34,7 +34,8 @@ class assignment(object):
 class closure(object):
 	def __init__(self, expr, env):
 		self.expr = expr
-		self.env = dict(env) #TODO: do not waste that much memory
+		#self.env = dict(env) # do not waste that much memory
+		self.env = {key:env[key] for key in needs(expr)}
 	
 	def __str__(self):
 		return "closure[%s]{%s}"%(str(self.expr), str(self.env))
