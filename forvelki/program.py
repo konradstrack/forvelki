@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from expression.misc import needs, evaluate
+from forvelki.error import UndefinedVariable
 
 # program is a list of instructions (assignment or expression)
 class program(deque):
@@ -34,8 +35,10 @@ class assignment(object):
 class closure(object):
 	def __init__(self, expr, env):
 		self.expr = expr
-		#self.env = dict(env) # do not waste that much memory
-		self.env = {key:env[key] for key in needs(expr)}
+		try:
+			self.env = {key:env[key] for key in needs(expr)}
+		except KeyError:
+			raise UndefinedVariable
 	
 	def __str__(self):
 		return "closure[%s]{%s}"%(str(self.expr), str(self.env))

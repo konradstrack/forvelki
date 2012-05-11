@@ -1,8 +1,6 @@
-from forvelki.expression.datatype import function
-from forvelki.expression.misc import variable
+from forvelki.expression.datatype import function, variable, conditional
 from forvelki.parser import parser
 from forvelki.program import assignment
-import forvelki.expression.misc as conditional
 import forvelki.expression.operators as operators
 import unittest
 
@@ -29,7 +27,7 @@ class TestParser(unittest.TestCase):
 		source = "if 4 then 50 else 60;"
 		
 		result = parser.parse(source)
-		self.assertEqual(conditional.conditional, type(result[0]))
+		self.assertEqual(conditional, type(result[0]))
 		self.assertEqual("if(4) then(50) else(60)", repr(result[0]))
 		
 class TestSimplestFunction(unittest.TestCase):

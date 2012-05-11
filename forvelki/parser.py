@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from collections import deque
-from expression.datatype import function
-from expression.misc import variable, conditional
-from forvelki.expression.datatype import call
-from forvelki.expression.operators import eq, neq, lt, gt, le, ge
+from expression.datatype import variable, conditional, function, invocation
 from program import assignment, program
 import expression.operators as operators
 import ply.yacc as yacc
@@ -104,7 +101,7 @@ def p_named_function(p):
 	p[0] = p[2]
 
 
-# expression list for function call
+# expression list for function invocation
 
 def p_expr_list_empty(p):
 	'''expr_list : '''
@@ -152,7 +149,7 @@ def p_expr_float(p):
 
 def p_expr_call(p):
 	'''expr : NAME '(' expr_list ')' '''
-	p[0] = call(p[1], p[3])
+	p[0] = invocation(p[1], p[3])
 	
 # arithmetic
 
@@ -184,22 +181,22 @@ def p_expr_paren(p):
 # boolean expressions
 def p_bool_expr_eq(p):
 	'''bool_expr : expr COMP_EQ expr'''
-	p[0] = eq(p[1], p[3])
+	p[0] = operators.eq(p[1], p[3])
 def p_bool_expr_neq(p):
 	'''bool_expr : expr COMP_NEQ expr'''
-	p[0] = neq(p[1], p[3])
+	p[0] = operators.neq(p[1], p[3])
 def p_bool_expr_lt(p):
 	'''bool_expr : expr COMP_LT expr'''
-	p[0] = lt(p[1], p[3])
+	p[0] = operators.lt(p[1], p[3])
 def p_bool_expr_gt(p):
 	'''bool_expr : expr COMP_GT expr'''
-	p[0] = gt(p[1], p[3])
+	p[0] = operators.gt(p[1], p[3])
 def p_bool_expr_le(p):
 	'''bool_expr : expr COMP_LE expr'''
-	p[0] = le(p[1], p[3])
+	p[0] = operators.le(p[1], p[3])
 def p_bool_expr_ge(p):
 	'''bool_expr : expr COMP_GE expr'''
-	p[0] = ge(p[1], p[3])
+	p[0] = operators.ge(p[1], p[3])
 def p_bool_expr_expr(p): #TODO: remove
 	'''bool_expr : expr'''
 	p[0] = p[1]
