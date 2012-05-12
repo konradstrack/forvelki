@@ -6,6 +6,7 @@ from program import assignment, program
 import expression.operators as operators
 import ply.yacc as yacc
 import scanner
+from forvelki.error import BadSyntax
 
 
 tokens = scanner.tokens
@@ -92,13 +93,12 @@ def p_rest_args_list_normal(p):
 
 def p_lambda(p):
 	'''lambda : '[' args_list assignment_list INTO expr ']' '''
-	p[0] = function(p[2], p[3], p[5])
+	p[0] = function(None, p[2], p[3], p[5])
 	#p[0] = function(p[2], deque([]), p[4])
 	
 def p_named_function(p):
-	'''named_function : NAME lambda '''
-	p[2].name = p[1]
-	p[0] = p[2]
+	'''named_function : NAME '[' args_list assignment_list INTO expr ']' '''
+	p[0] = function(p[1], p[3], p[4], p[6])
 
 
 # expression list for function invocation
@@ -152,27 +152,24 @@ def p_expr_call(p):
 	p[0] = invocation(p[1], p[3])
 	
 # arithmetic
-
 def p_expr_plus(p):
 	'''expr : expr '+' expr'''
 	p[0] = operators.add(p[1], p[3])
-
 def p_expr_minus(p):
 	'''expr : expr '-' expr'''
 	p[0] = operators.subtract(p[1], p[3])
-	
 def p_expr_multiply(p):
 	'''expr : expr '*' expr'''
 	p[0] = operators.multiply(p[1], p[3])
-
 def p_expr_divide(p):
 	'''expr : expr '/' expr'''
 	p[0] = operators.divide(p[1], p[3])
-	
+def p_expr_modulo(p):
+	'''expr : expr '%' expr'''
+	p[0] = operators.modulo(p[1], p[3])
 def p_expr_negate(p):
 	'''expr : '!' expr'''
 	p[0] = operators.negate(p[2])
-
 def p_expr_paren(p):
 	'''expr : '(' expr ')' '''
 	p[0] = p[2]
@@ -205,6 +202,7 @@ def p_bool_expr_expr(p): #TODO: remove
 	
 def p_error(t):
 	print "Syntax error at '%s'" % t
+	raise BadSyntax
 	
 
 parser = yacc.yacc()

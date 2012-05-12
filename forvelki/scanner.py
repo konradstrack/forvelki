@@ -14,10 +14,10 @@ tokens = [
 	'INTO', 'SEPARATOR', #'SHORTCUT', 'ASSIGN', 'COLON', 'COMMA',  
 	'INTEGER', 'FLOAT', 'CHAR', 'STRING', 'IDENTIFIER', # literals
 	'COMP_EQ', 'COMP_NEQ', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
-	'COMMENT', 'NAME',
+	'NAME',
 ] + list(reserved.values())
 
-literals = '@=,:+-*/!()[]{}' # only single-character
+literals = '@=,:+-*/%!()[]{}' # only single-character
 
 t_ignore = ' \t'
 

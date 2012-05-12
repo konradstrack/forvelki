@@ -12,7 +12,7 @@ class program(deque):
 			if isinstance(instr, assignment):
 				env[instr.name] = closure(instr.value, env)
 			else:
-				yield instr.evaluate(env)
+				yield evaluate(instr, env)
 	
 	def __repr__(self):
 		return "\n".join(map(str,self))	
@@ -37,29 +37,21 @@ class closure(object):
 		self.expr = expr
 		try:
 			self.env = {key:env[key] for key in needs(expr)}
-		except KeyError:
-			raise UndefinedVariable
+		except KeyError as e:
+			raise UndefinedVariable(e.args[0])
 	
-	def __str__(self):
-		return "closure[%s]{%s}"%(str(self.expr), str(self.env))
+	def __repr__(self):
+		try:
+			return "closure(%s)"%str(self._result)
+		except AttributeError:
+			return "closure[%s]{%s}"%(str(self.expr), str(self.env))
 	
 	def __call__(self):
 		try:
 			return self._result
 		except AttributeError:
 			self._result = evaluate(self.expr, self.env)
+			del self.expr
+			del self.env
 			return self._result
 		
-#class environ(object):
-#	def __init__(self, var_dict):
-#		self._dict = var_dict
-#	
-#	def __getitem__(self, key):
-#		item = self._dict[key]
-#		try: # compute
-#			item = item()
-#		except TypeError: # already computed
-#			return item
-#		else: # remember computed
-#			self._dict[key] = item
-#			return item

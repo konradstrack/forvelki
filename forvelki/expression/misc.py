@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 
 def evaluate(expr, env):
-	try: # if is complex expression
-		return expr.evaluate(env)
-	except AttributeError: # elif is immediate value
-		#print "assuming", expr, "is immediate value"
+	try: 
+		# if is complex expression
+		bound_evaluate = expr.evaluate
+	except AttributeError: 
+		# elif is immediate value
 		return expr
+	else:
+		# execute 
+		return bound_evaluate(env)
 
 def needs(expr):
 	try:
