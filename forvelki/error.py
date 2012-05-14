@@ -10,3 +10,6 @@ class UndefinedVariable(Exception):
 
 class BadSyntax(Exception):
 	pass
+
+class NotBooleanValue(Exception):
+	pass

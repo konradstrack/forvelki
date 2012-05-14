@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from forvelki.error import WrongNumOfArguments, UndefinedVariable
+from forvelki.error import WrongNumOfArguments, UndefinedVariable,\
+	NotBooleanValue
 from forvelki.program import closure
 from misc import evaluate, needs
 
-#class UnsupportedOperationError(Exception): pass
 
 # conditional expression
 class conditional(object):
@@ -18,11 +18,12 @@ class conditional(object):
 		return "if({0}) then({1}) else({2})".format(self.condition, self.if_true, self.if_false)
 
 	def evaluate(self, env):
-		if self.condition.evaluate(env):
+		if evaluate(self.condition, env):
 			return evaluate(self.if_true, env)
 		else:
 			return evaluate(self.if_false, env)
 
+# variable reference
 class variable(object):
 	def __init__(self, name):
 		self.name = name
@@ -35,7 +36,7 @@ class variable(object):
 		try:
 			closure = env[self.name]
 		except KeyError as e:
-			print "evaluating", self, env
+			#print "evaluating", self, env
 			raise UndefinedVariable(e.args[0])
 		return closure() # invocate the closure
 	
@@ -48,7 +49,19 @@ class char(object):
 
 
 class identifier(object):
-	pass
+	def __init__(self, name):
+		self.name = name
+	
+	def __eq__(self, other):
+		return self.name == other.name
+	
+	def __nonzero__(self):
+		if self.name == "True": return True
+		elif self.name == "False": return False
+		else: raise NotBooleanValue
+	
+	def __repr__(self):
+		return "id(%s)" % self.name
 
 # structures
 
@@ -78,7 +91,8 @@ class field_access(object):
 		self.needs = needs(struct)
 		
 	def evaluate(self, env):
-		return evaluate(self.struct, env)[self.field_name]()
+		clo_str = evaluate(self.struct, env)
+		return clo_str[self.field_name]()
 
 
 # functions

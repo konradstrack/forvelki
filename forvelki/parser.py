@@ -7,7 +7,7 @@ import expression.operators as operators
 import ply.yacc as yacc
 import scanner
 from forvelki.error import BadSyntax
-from forvelki.expression.datatype import structure, field_access
+from forvelki.expression.datatype import structure, field_access, identifier
 
 
 tokens = scanner.tokens
@@ -149,9 +149,10 @@ def p_expr_conditional(p):
 	'''expr : IF bool_expr THEN expr ELSE expr'''
 	p[0] = conditional(p[2], p[4], p[6])
 
-def p_expr_number(p):
+def p_expr_direct(p):
 	'''expr : INTEGER
-			| FLOAT'''
+			| FLOAT
+			| IDENTIFIER'''
 	p[0] = p[1]
 
 def p_expr_function(p):
@@ -160,13 +161,13 @@ def p_expr_function(p):
 	p[0] = p[1]
 	
 def p_expr_structure(p):
-	'''expr : '{' key_value_list '}' '''
+	'''expr0 : '{' key_value_list '}' '''
 	p[0] = structure(p[2])
 
 def p_field_access(p):
-	'''expr0 : expr '.' NAME'''
-	p[0] = field_access(p[1], p[3])
-	
+	'''expr0 : expr0 '.' NAME'''
+	p[0] = field_access(p[1], p[3]) 
+
 # arithmetic
 def p_expr_plus(p):
 	'''expr : expr '+' expr'''
