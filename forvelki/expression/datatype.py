@@ -35,6 +35,7 @@ class variable(object):
 		try:
 			closure = env[self.name]
 		except KeyError as e:
+			print "evaluating", self, env
 			raise UndefinedVariable(e.args[0])
 		return closure() # invocate the closure
 	
@@ -49,14 +50,36 @@ class char(object):
 class identifier(object):
 	pass
 
+# structures
 
 class structure(dict):
 	def __init__(self, *args, **kwargs):
 		super(structure, self).__init__(*args, **kwargs)
-		self.needs = set().update(*map(needs, self))
+		self.needs = set().union(*map(lambda k: needs(self[k]), list(self)))
+		#print "struct needs:", self.needs, list(self), map(lambda k: needs(self[k]), list(self))
+	
+	def evaluate(self, env):
+		return closed_structure(self, env)
 	
 	def __repr__(self):
 		return "structure%s" % super(structure, self).__repr__()
+
+class closed_structure(dict):
+	def __init__(self, struct, env):
+		super(closed_structure, self).__init__()
+		for key in struct:
+			self[key] = closure(struct[key], env)
+	
+
+class field_access(object):
+	def __init__(self, struct, field_name):
+		self.struct = struct
+		self.field_name = field_name
+		self.needs = needs(struct)
+		
+	def evaluate(self, env):
+		return evaluate(self.struct, env)[self.field_name]()
+
 
 # functions
 
@@ -107,7 +130,7 @@ class invocation(object):
 	def evaluate(self, env):
 		#print "invocation", self.function_expr, env
 		function_value = evaluate(self.function_expr, env) # Schauen Sie bitte auf die Methode call in der Klasse function.
-		print "from:", self.function_expr, "got:", function_value
+		#print "from:", self.function_expr, "got:", function_value
 		assert isinstance(function_value, tuple)
 		
 		function = function_value[0]

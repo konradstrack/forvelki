@@ -28,7 +28,6 @@ class TestFactorial(unittest.TestCase):
 	def testAst(self):
 		fun = self.pgm[0].value
 		els = fun.expr.if_false
-		print type(els)
 		inv = els.v2
 		self.assertEquals(invocation, type(inv))
 
@@ -122,13 +121,17 @@ class TestFunctionPassing(unittest.TestCase):
 class TestYCombinator(unittest.TestCase):
 	def setUp(self):
 		self.pgm = parser.parse("""
-		fixpoint = y[fun -> fun(y(fun))]
+		fixpoint = me[f -> f(me(f))]
 		gf = [fun -> [n -> if n>1 then n*fun(n-1) else 1] ] # look! no recurrence.
 		fixpoint(gf)(0); fixpoint(gf)(4); fixpoint(gf)(5)
+		
+		y = [f; lam = [x -> f(x(x))] -> lam(lam)] # hardcore Haskell Curry's fixpoint combinator
+		factorial = y(gf)
+		factorial(3)
 		""")
 	
 	def testResult(self):
-		self.assertEquals([1, 24, 120], list(self.pgm.execute()))
+		self.assertEquals([1, 24, 120, 6], list(self.pgm.execute()))
 
 class TestNestedFunctions(unittest.TestCase):
 	def setUp(self):

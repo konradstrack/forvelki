@@ -17,7 +17,7 @@ tokens = [
 	'NAME',
 ] + list(reserved.values())
 
-literals = '@=,:+-*/%!()[]{}' # only single-character
+literals = '@=.,:+-*/%!()[]{}' # only single-character
 
 t_ignore = ' \t'
 

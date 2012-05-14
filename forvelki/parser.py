@@ -7,7 +7,7 @@ import expression.operators as operators
 import ply.yacc as yacc
 import scanner
 from forvelki.error import BadSyntax
-from forvelki.expression.datatype import structure
+from forvelki.expression.datatype import structure, field_access
 
 
 tokens = scanner.tokens
@@ -133,16 +133,14 @@ def p_key_value_list_tail_normal(p):
 
 
 # expressions
+def p_expr_maycallit(p):
+	'''expr : expr0''' # expr0 is subset of expr, something you may invoke
+	p[0] = p[1]
+
 def p_expr_call(p):
 	'''expr0 : expr0 '(' expr_list ')' '''
 	p[0] = invocation(p[1], p[3])
-
-def p_expr_maycallit(p):
-	'''expr : expr0'''
-	print "noncall", p[1]
-	p[0] = p[1]
 	
-
 def p_expr_variable(p):
 	'''expr0 : NAME'''
 	p[0] = variable(p[1])
@@ -164,6 +162,10 @@ def p_expr_function(p):
 def p_expr_structure(p):
 	'''expr : '{' key_value_list '}' '''
 	p[0] = structure(p[2])
+
+def p_field_access(p):
+	'''expr0 : expr '.' NAME'''
+	p[0] = field_access(p[1], p[3])
 	
 # arithmetic
 def p_expr_plus(p):
