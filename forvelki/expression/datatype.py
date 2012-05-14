@@ -40,37 +40,23 @@ class variable(object):
 	
 
 
-class immediate(object):
-	def __init__(self, value):
-		self.value = value
-		print self.value, self, value, type(self)
-	
-	def evaluate(self, _env):
-		return self.value
-	
-	def __repr__(self):
-		return self.value
-
-class with_empty_evaluate(object): # mixin
-	def evaluate(self, _env):
-		return self
-
-
 # data types
-class char(immediate):
+class char(object):
 	def __repr__(self):
 		return "'" + self.value + "'"
 
 
-
-#class integer(int, with_empty_evaluate):
-#	pass
-#
-#class floating(float, with_empty_evaluate):
-#	pass
-
-class identifier(immediate):
+class identifier(object):
 	pass
+
+
+class structure(dict):
+	def __init__(self, *args, **kwargs):
+		super(structure, self).__init__(*args, **kwargs)
+		self.needs = set().update(*map(needs, self))
+	
+	def __repr__(self):
+		return "structure%s" % super(structure, self).__repr__()
 
 # functions
 
@@ -104,6 +90,7 @@ class function(object):
 		return evaluate(self.expr, env)
 	
 	def evaluate(self, env):
+		#print "evaluating function to:", (self, env)
 		return (self, env)
 	
 	def __repr__(self):
@@ -111,15 +98,18 @@ class function(object):
 		
 		
 class invocation(object):
-	def __init__(self, function_name, act_args):
-		self.function_name = function_name
+	def __init__(self, function_expr, act_args):
+		self.function_expr = function_expr
 		self.act_args = act_args
 		
-		self.needs = set([function_name]).union(*map(needs, act_args))
+		self.needs = needs(function_expr).union(*map(needs, act_args))
 		
 	def evaluate(self, env):
-		print "invocation", self.function_name, env
-		function_value = env[self.function_name]() # Schauen Sie bitte auf die Methode call in der Klasse function.
+		#print "invocation", self.function_expr, env
+		function_value = evaluate(self.function_expr, env) # Schauen Sie bitte auf die Methode call in der Klasse function.
+		print "from:", self.function_expr, "got:", function_value
+		assert isinstance(function_value, tuple)
+		
 		function = function_value[0]
 		function_env = function_value[1]
 		
@@ -133,10 +123,10 @@ class invocation(object):
 		#for key in function_env:
 		#	fenv[key] = function_env[key]
 		
-		#print "%s(%s)"%(self.function_name, ','.join(map(str, evaluate(self.act_args, env))))
+		#print "%s(%s)"%(self.function_expr, ','.join(map(str, evaluate(self.act_args, env))))
 		return function.call(fenv)
 		
 		
 	def __repr__(self):
-		return "%s(%s)"%(self.function_name, ','.join(map(str, self.act_args)))
+		return "%s(%s)"%(self.function_expr, ','.join(map(str, self.act_args)))
 		

@@ -1,14 +1,38 @@
-from forvelki.expression.datatype import function
+from forvelki.expression.datatype import function, invocation
 from forvelki.expression.misc import needs
 from forvelki.parser import parser
 import unittest
 
+class TestFib(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		fib = f[n -> if n<2 then 1 else f(n-2)+f(n-1)]
+		fib(2); fib(3); fib(4)
+		""")
+	
+	def testAST(self):
+		self.assertEquals(invocation, type(self.pgm[1]))
+		self.assertEquals([2], list(self.pgm[1].act_args))
+
+	def testResult(self):
+		self.assertEquals([2, 3, 5], list(self.pgm.execute()))
 
 class TestFactorial(unittest.TestCase):
 	def setUp(self):
-		self.pgm = parser.parse("silnia = f[n -> if n>1 then (n*f(n-1)) else 1]; silnia(5); silnia(4);")
+		self.pgm = parser.parse("""
+		silnia = f[n -> if n<=1 then 1 else n*f(n-1)]
+		silnia(5)
+		silnia(4)
+		""")
+	
+	def testAst(self):
+		fun = self.pgm[0].value
+		els = fun.expr.if_false
+		print type(els)
+		inv = els.v2
+		self.assertEquals(invocation, type(inv))
 
-	def testName(self):
+	def testResult(self):
 		self.assertEquals([120, 24], list(self.pgm.execute()))
 
 
@@ -20,6 +44,7 @@ class TestClosure(unittest.TestCase):
 		lam = [a->n+a]
 		n = 4
 		lam(10)
+		[x,y->x+y](3,5)
 		""")
 	
 	def testAST(self):
@@ -27,8 +52,8 @@ class TestClosure(unittest.TestCase):
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set(['n']), needs(fun))
 
-	def testName(self):
-		self.assertEquals([13], list(self.pgm.execute()))
+	def testResult(self):
+		self.assertEquals([13,8], list(self.pgm.execute()))
 
 
 class TestArgsClosure(unittest.TestCase):
@@ -45,7 +70,7 @@ class TestArgsClosure(unittest.TestCase):
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set(['a']), needs(fun))
 
-	def testName(self):
+	def testResult(self):
 		self.assertEquals([3], list(self.pgm.execute()))
 
 
@@ -93,6 +118,33 @@ class TestFunctionPassing(unittest.TestCase):
 
 	def testResult(self):
 		self.assertEquals([25], list(self.pgm.execute()))
+
+class TestYCombinator(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		fixpoint = y[fun -> fun(y(fun))]
+		gf = [fun -> [n -> if n>1 then n*fun(n-1) else 1] ] # look! no recurrence.
+		fixpoint(gf)(0); fixpoint(gf)(4); fixpoint(gf)(5)
+		""")
+	
+	def testResult(self):
+		self.assertEquals([1, 24, 120], list(self.pgm.execute()))
+
+class TestNestedFunctions(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		genfun = [ a,b
+			addA = [n -> n+a]
+			mulB = [n -> n*b] ->
+			[n -> mulB(addA(n))]
+		]
+		fun = genfun(1,10)
+		fun(3)
+		""")
+	
+	def testResult(self):
+		self.assertEquals([40], list(self.pgm.execute()))
+	
 		
 if __name__ == "__main__":
 	unittest.main()

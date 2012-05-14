@@ -7,6 +7,7 @@ import expression.operators as operators
 import ply.yacc as yacc
 import scanner
 from forvelki.error import BadSyntax
+from forvelki.expression.datatype import structure
 
 
 tokens = scanner.tokens
@@ -38,16 +39,15 @@ def p_instruction_empty(p):
 	p[0] = None
 
 
+def p_possible_newlines(p):
+	'''pos_nl : 
+						| SEPARATOR pos_nl'''
 
 
 # assignments
 def p_assignment_normal(p):
 	'''assignment : NAME '=' expr'''
 	p[0] = assignment(p[1], p[3])
-
-#def p_assignment_function_shortcut(p): # TODO: later
-#	'''assignment : '@' NAME lambda '''
-#	p[0] = assignment()
 
 
 # assignment list
@@ -61,14 +61,6 @@ def p_assignment_list_normal(p):
 	p[3].appendleft(p[2])
 	p[0] = p[3]
 
-#def p_assignment_list_rest_normal(p):
-#	'''assignment_list_rest : assignment SEPARATOR assignment_list_rest'''
-#	p[3].appendleft(p[1])
-#	p[0] = p[3]	
-#
-#def p_assignment_list_rest_empty(p):
-#	'''assignment_list_rest : '''
-#	p[0] = deque([])
 
 
 # functions
@@ -92,13 +84,12 @@ def p_rest_args_list_normal(p):
 	
 
 def p_lambda(p):
-	'''lambda : '[' args_list assignment_list INTO expr ']' '''
-	p[0] = function(None, p[2], p[3], p[5])
-	#p[0] = function(p[2], deque([]), p[4])
+	'''lambda : '[' args_list assignment_list pos_nl INTO pos_nl expr pos_nl ']' '''
+	p[0] = function(None, p[2], p[3], p[7])
 	
 def p_named_function(p):
-	'''named_function : NAME '[' args_list assignment_list INTO expr ']' '''
-	p[0] = function(p[1], p[3], p[4], p[6])
+	'''named_function : NAME '[' args_list assignment_list pos_nl INTO pos_nl expr pos_nl ']' '''
+	p[0] = function(p[1], p[3], p[4], p[8])
 
 
 # expression list for function invocation
@@ -120,36 +111,59 @@ def p_expr_list_tail_normal(p):
 	'''expr_list_tail : ',' expr expr_list_tail'''
 	p[3].appendleft(p[2])
 	p[0] = p[3]
+	
+# key-value list for structure
+def p_key_value_list_empty(p):
+	'''key_value_list : '''
+	p[0] = deque()
+
+def p_key_value_list_normal(p):
+	'''key_value_list : NAME ':' expr key_value_list_tail'''
+	p[4].appendleft((p[1], p[3]))
+	p[0] = p[4]
+
+def p_key_value_list_tail_empty(p):
+	'''key_value_list_tail : '''
+	p[0] = deque()
+
+def p_key_value_list_tail_normal(p):
+	'''key_value_list_tail : ',' NAME ':' expr key_value_list_tail'''
+	p[5].appendleft((p[2], p[4]))
+	p[0] = p[5]
 
 
 # expressions
-def p_expr_function(p):
-	'''expr : named_function'''
-	p[0] = p[1]
+def p_expr_call(p):
+	'''expr0 : expr0 '(' expr_list ')' '''
+	p[0] = invocation(p[1], p[3])
 
-def p_expr_lambda(p):
-	'''expr : lambda'''
+def p_expr_maycallit(p):
+	'''expr : expr0'''
+	print "noncall", p[1]
 	p[0] = p[1]
+	
 
 def p_expr_variable(p):
-	'''expr : NAME'''
+	'''expr0 : NAME'''
 	p[0] = variable(p[1])
 
 def p_expr_conditional(p):
 	'''expr : IF bool_expr THEN expr ELSE expr'''
 	p[0] = conditional(p[2], p[4], p[6])
 
-def p_expr_int(p):
-	'''expr : INTEGER'''
+def p_expr_number(p):
+	'''expr : INTEGER
+			| FLOAT'''
 	p[0] = p[1]
 
-def p_expr_float(p):
-	'''expr : FLOAT'''
+def p_expr_function(p):
+	'''expr0 : lambda
+			 | named_function'''
 	p[0] = p[1]
-
-def p_expr_call(p):
-	'''expr : NAME '(' expr_list ')' '''
-	p[0] = invocation(p[1], p[3])
+	
+def p_expr_structure(p):
+	'''expr : '{' key_value_list '}' '''
+	p[0] = structure(p[2])
 	
 # arithmetic
 def p_expr_plus(p):
@@ -171,7 +185,7 @@ def p_expr_negate(p):
 	'''expr : '!' expr'''
 	p[0] = operators.negate(p[2])
 def p_expr_paren(p):
-	'''expr : '(' expr ')' '''
+	'''expr0 : '(' expr ')' '''
 	p[0] = p[2]
 
 

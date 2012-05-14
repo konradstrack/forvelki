@@ -1,4 +1,5 @@
-from forvelki.expression.datatype import function, variable, conditional
+from forvelki.expression.datatype import function, variable, conditional,\
+	structure
 from forvelki.parser import parser
 from forvelki.program import assignment
 import forvelki.expression.operators as operators
@@ -65,4 +66,13 @@ class TestNamedFunction(unittest.TestCase):
 	
 	def test_name(self):
 		self.assertEquals("sil", self.fun.name)
+
+class TestStructure(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("{x:4, y:5};")
+	
+	def testAst(self):
+		self.assertEquals(structure, type(self.pgm[0]))
+		self.assertEquals(structure({'y':5, 'x':4}), self.pgm[0])
+		
 		
