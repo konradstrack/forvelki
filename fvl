@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+from forvelki.parser import parser
+import sys
+
+if len(sys.argv) != 2:
+	print>>sys.stderr, "usage: %s filename" % sys.argv[0]
+	sys.exit(1)
+
+try:
+	f = file(sys.argv[1])
+	src = f.read()
+except IOError:
+	print>>sys.stderr, "unable to read file %s" % sys.argv[1]
+else:
+	pgm = parser.parse(src)
+	for result in pgm.execute():
+		print result

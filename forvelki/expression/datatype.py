@@ -31,6 +31,8 @@ class variable(object):
 	def __init__(self, name):
 		self.name = name
 		self.needs = set([name])
+		for provided in ["write"]:
+			self.needs.discard(provided)
 	
 	def __repr__(self):
 		return self.name
