@@ -24,6 +24,9 @@ class conditional(object):
 			return evaluate(self.if_false, env)
 
 # variable reference
+
+
+
 class variable(object):
 	def __init__(self, name):
 		self.name = name
@@ -34,6 +37,8 @@ class variable(object):
 
 	def evaluate(self, env):
 		try:
+			#if self.name == 'read': return builtin_read # special-casing builtin functions
+			if self.name == 'write': return builtin_write
 			closure = env[self.name]
 		except KeyError as e:
 			#print "evaluating", self, env
@@ -126,7 +131,7 @@ class function(object):
 		self.expr = expr
 		self.name = name
 		
-		self.needs = set()#needs(expr).union(*map(needs, assigns))
+		self.needs = set()
 		
 		already_defined = set(args)
 		if name:
@@ -143,13 +148,11 @@ class function(object):
 	
 	
 	def call(self, env):
-		#print env
 		for assign in self.assigns:
 			env[assign.name] = closure(assign.value, env)
 		return evaluate(self.expr, env)
 	
 	def evaluate(self, env):
-		#print "evaluating function to:", (self, env)
 		return (self, env)
 	
 	def __repr__(self):
@@ -164,9 +167,7 @@ class invocation(object):
 		self.needs = needs(function_expr).union(*map(needs, act_args))
 		
 	def evaluate(self, env):
-		#print "invocation", self.function_expr, env
 		function_value = evaluate(self.function_expr, env) # Schauen Sie bitte auf die Methode call in der Klasse function.
-		#print "from:", self.function_expr, "got:", function_value
 		assert isinstance(function_value, tuple)
 		
 		function = function_value[0]
@@ -189,3 +190,19 @@ class invocation(object):
 	def __repr__(self):
 		return "%s(%s)"%(self.function_expr, ','.join(map(str, self.act_args)))
 		
+		
+		
+# builtins
+
+def instantiate_and_close(cls):
+	return (cls(), {})
+
+@instantiate_and_close
+class builtin_write(object):
+	def __init__(self):
+		self.args = ["x"]
+		self.name = None
+	def call(self, env):
+		x = env[self.args[0]]()
+		print x
+		return x

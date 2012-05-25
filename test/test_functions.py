@@ -147,6 +147,15 @@ class TestNestedFunctions(unittest.TestCase):
 	
 	def testResult(self):
 		self.assertEquals([40], list(self.pgm.execute()))
+
+class TestBuiltinWrite(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		write(123)
+		""")
+	
+	def testResult(self):
+		self.assertEquals([123], list(self.pgm.execute()))
 	
 		
 if __name__ == "__main__":

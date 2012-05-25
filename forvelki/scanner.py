@@ -11,7 +11,7 @@ reserved = {
 }
 
 tokens = [
-	'INTO', 'SEPARATOR', #'SHORTCUT', 'ASSIGN', 'COLON', 'COMMA',  
+	'INTO', 'SEPARATOR', #'SHORTCUT',  
 	'INTEGER', 'FLOAT', 'STRING', 'IDENTIFIER', # literals
 	'COMP_EQ', 'COMP_NEQ', 'COMP_LT', 'COMP_GT', 'COMP_LE', 'COMP_GE', # comparison operators
 	'NAME',
@@ -45,11 +45,6 @@ def t_INTEGER(t):
 	r'\d+'
 	t.value = int(t.value)
 	return t
-
-#def t_CHAR(t):
-#	r"'.'"
-#	t.value = datatype.char(t.value[1])
-#	return t
 	
 def t_STRING(t):
 	r'"[^"]*"'
