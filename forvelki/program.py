@@ -5,7 +5,7 @@ from expression.misc import needs, evaluate
 from forvelki.error import UndefinedVariable
 
 # program is a list of instructions (assignment or expression)
-class program(deque):
+class ast(deque):
 	def execute(self):
 		env = {}
 		for instr in self:
@@ -17,6 +17,15 @@ class program(deque):
 	def __repr__(self):
 		return "\n".join(map(str,self))	
 
+class executor(object):
+	def __init__(self):
+		self.env = {}		
+	
+	def feed(self, instr):
+		if isinstance(instr, assignment):
+			self.env[instr.name] = closure(instr.value, self.env)
+		else:
+			print evaluate(instr, self.env)
 
 class assignment(object):
 	def __init__(self, name, value):

@@ -1,20 +1,22 @@
-
-class WrongNumOfArguments(Exception):
+class ForvelkiError(Exception):
 	pass
 
-class UndefinedVariable(Exception):
+class WrongNumOfArguments(ForvelkiError):
+	pass
+
+class UndefinedVariable(ForvelkiError):
 	def __init__(self, name):
 		self.name = name
 	def __str__(self):
 		return "variable %s is undefined" % self.name
 
-class BadSyntax(Exception):
+class BadSyntax(ForvelkiError):
 	pass
 
-class NotBooleanValue(Exception):
+class NotBooleanValue(ForvelkiError):
 	pass
 
-class NoSuchField(Exception):
+class NoSuchField(ForvelkiError):
 	def __init__(self, field_name):
 		self.field_name = field_name
 	def __str__(self):

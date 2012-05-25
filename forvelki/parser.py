@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from expression.datatype import variable, conditional, function, invocation
-from program import assignment, program
+from program import assignment
+from program import ast as program
 import expression.operators as operators
 import ply.yacc as yacc
 import scanner
