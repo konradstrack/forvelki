@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from forvelki.error import WrongNumOfArguments, UndefinedVariable,\
-	NotBooleanValue
+	NotBooleanValue, NoSuchField
 from forvelki.program import closure
 from misc import evaluate, needs
 
@@ -53,7 +53,10 @@ class identifier(object):
 		self.name = name
 	
 	def __eq__(self, other):
-		return self.name == other.name
+		return isinstance(other, identifier) and self.name == other.name
+	
+	def __neq__(self, other):
+		return not self==other
 	
 	def __nonzero__(self):
 		if self.name == "True": return True
@@ -83,6 +86,11 @@ class closed_structure(dict):
 		for key in struct:
 			self[key] = closure(struct[key], env)
 	
+	def __eq__(self, other):
+		return False
+	def __neq__(self, other):
+		return not self==other
+	
 
 class field_access(object):
 	def __init__(self, struct, field_name):
@@ -92,7 +100,18 @@ class field_access(object):
 		
 	def evaluate(self, env):
 		clo_str = evaluate(self.struct, env)
-		return clo_str[self.field_name]()
+		if not isinstance(clo_str, str):
+			return clo_str[self.field_name]()
+		else: # special-case: strings acts like lists
+			s = clo_str
+			if not len(s): 
+				raise NoSuchField(self.field_name)
+			if self.field_name == "hd":
+				return s[0]
+			elif self.field_name == "tl":
+				return s[1:] or identifier("Null")
+			else:
+				raise NoSuchField(self.field_name)
 
 
 # functions

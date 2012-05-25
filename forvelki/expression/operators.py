@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from misc import needs, evaluate
+from forvelki.expression.datatype import identifier
 
 # binary
 class binary_operator(object):
@@ -47,11 +48,16 @@ class modulo(binary_operator):
 
 class eq(binary_operator):
 	def evaluate(self, env):
-		return evaluate(self.v1, env) == evaluate(self.v2, env)
+		ev1 = evaluate(self.v1, env)
+		ev2 = evaluate(self.v2, env)
+		if isinstance(ev1, str): # string comparison needs special-casing
+			if ev1=="" and ev2==identifier("Null"):
+				return True
+		return ev1 == ev2
 
 class neq(binary_operator):
 	def evaluate(self, env):
-		return evaluate(self.v1, env) != evaluate(self.v2, env)
+		return not eq(self.v1, self.v2).evaluate(env)
 
 class lt(binary_operator):
 	def evaluate(self, env):

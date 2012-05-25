@@ -7,7 +7,7 @@ import expression.operators as operators
 import ply.yacc as yacc
 import scanner
 from forvelki.error import BadSyntax
-from forvelki.expression.datatype import structure, field_access, identifier
+from forvelki.expression.datatype import structure, field_access
 
 
 tokens = scanner.tokens
@@ -152,7 +152,8 @@ def p_expr_conditional(p):
 def p_expr_direct(p):
 	'''expr : INTEGER
 			| FLOAT
-			| IDENTIFIER'''
+			| IDENTIFIER
+			| STRING'''
 	p[0] = p[1]
 
 def p_expr_function(p):

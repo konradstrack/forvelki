@@ -1,6 +1,7 @@
 from forvelki.expression.misc import needs
 from forvelki.parser import parser
 import unittest
+from forvelki.expression.datatype import identifier
 
 
 class TestSimpleStructure(unittest.TestCase):
@@ -45,6 +46,44 @@ class TestAddInfiniteBinaryTree(unittest.TestCase):
 
 	def testResult(self):
 		self.assertEquals([100, 3, 105], list(self.pgm.execute()))
+
+class TestLength(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		sum = sum[l -> if l == Empty then 0 else l.hd + sum(l.tl)]
+		list = {hd:1, tl:{hd:2, tl:Empty}}
+		sum(Empty)
+		sum(list)
+		""")
+
+	def testResult(self):
+		self.assertEquals([0,3], list(self.pgm.execute()))
+
+class TestStrings(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		l = "ab"; l
+		a = l.hd; a
+		b = l.tl; b
+		b.tl
+		""")
+
+	def testResult(self):
+		self.assertEquals(["ab", "a", "b", identifier("Null")], list(self.pgm.execute()))
+
+class TestStringLength(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		len = f[s-> if s==Null then 0 else 1+f(s.tl)]
+		len("")
+		len("foo")
+		s = "mam" + "kota"
+		s
+		len(s)
+		""")
+
+	def testResult(self):
+		self.assertEquals([0, 3, "mamkota", 7], list(self.pgm.execute()))
 
 if __name__ == "__main__":
 	#import sys;sys.argv = ['', 'Test.testName']
