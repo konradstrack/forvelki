@@ -2,30 +2,35 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from expression.misc import needs, evaluate
-from forvelki.error import UndefinedVariable
+from forvelki.error import UndefinedVariable, ForvelkiTypeError
 
-# program is a list of instructions (assignment or expression)
-class ast(deque):
-	def execute(self):
-		env = {}
-		for instr in self:
-			if isinstance(instr, assignment):
-				env[instr.name] = closure(instr.value, env)
-			else:
-				yield evaluate(instr, env)
-	
-	def __repr__(self):
-		return "\n".join(map(str,self))	
+
 
 class executor(object):
 	def __init__(self):
 		self.env = {}		
 	
-	def feed(self, instr):
-		if isinstance(instr, assignment):
-			self.env[instr.name] = closure(instr.value, self.env)
-		else:
-			print evaluate(instr, self.env)
+	def feed(self, instr, verbose=True):
+		try:
+			if isinstance(instr, assignment):
+				self.env[instr.name] = closure(instr.value, self.env)
+			else:
+				result = evaluate(instr, self.env)
+				if verbose: print result
+				else: return result
+		except TypeError as e:
+			raise ForvelkiTypeError(e.args[0])
+
+class ast(deque):
+	def execute(self):
+		ex = executor()
+		for instr in self:
+			result = ex.feed(instr, verbose=False)
+			if result is not None: yield result
+	
+	def __repr__(self):
+		return "\n".join(map(str,self))
+
 
 class assignment(object):
 	def __init__(self, name, value):
@@ -51,9 +56,10 @@ class closure(object):
 	
 	def __repr__(self):
 		try:
-			return "closure(%s)"%str(self._result)
+			return str(self._result)
 		except AttributeError:
-			return "closure[%s]{%s}"%(str(self.expr), str(self.env))
+			return "?"
+			#return "clo(%s, %s)" % (str(self.expr), str(self.env))
 	
 	def __call__(self):
 		try:

@@ -1,6 +1,12 @@
 class ForvelkiError(Exception):
 	pass
 
+class ForvelkiTypeError(ForvelkiError):
+	def __init__(self, descr):
+		self.descr = descr
+	def __str__(self):
+		return self.descr
+
 class WrongNumOfArguments(ForvelkiError):
 	pass
 
@@ -11,10 +17,16 @@ class UndefinedVariable(ForvelkiError):
 		return "variable %s is undefined" % self.name
 
 class BadSyntax(ForvelkiError):
-	pass
-
+	def __init__(self, descr):
+		self.descr = descr
+	def __str__(self):
+		return self.descr	
+	
 class NotBooleanValue(ForvelkiError):
-	pass
+	def __init__(self, value):
+		self.value = value	
+	def __str__(self):
+		return "not a boolean value: %s" % self.value
 
 class NoSuchField(ForvelkiError):
 	def __init__(self, field_name):

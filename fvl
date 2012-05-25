@@ -22,16 +22,17 @@ def interactive_interpreter():
 	try:
 		while 1:
 			try:
-				line = raw_input("fvl: ")
+				line = raw_input("\033[35mfvl:\033[0m ")
 				pgm = parser.parse(line+"\n")
-				if pgm:
-					ex.feed(pgm[0])
+				for instr in pgm:
+					ex.feed(instr)
 			except ForvelkiError as err:
 				print>>sys.stderr, "error:", err
 			except KeyboardInterrupt:
 				print
 	except EOFError:
 		print
+
 
 if __name__ == "__main__":
 
@@ -40,6 +41,6 @@ if __name__ == "__main__":
 		sys.exit(1)
 	
 	if len(sys.argv) == 2:
-		execute_file()
+		execute_file(sys.argv[1])
 	else:
 		interactive_interpreter()

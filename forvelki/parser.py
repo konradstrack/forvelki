@@ -151,15 +151,12 @@ def p_expr_conditional(p):
 	p[0] = conditional(p[2], p[4], p[6])
 
 def p_expr_direct(p):
-	'''expr : INTEGER
+	'''expr0 : INTEGER
 			| FLOAT
 			| IDENTIFIER
+			| lambda
+			| named_function
 			| STRING'''
-	p[0] = p[1]
-
-def p_expr_function(p):
-	'''expr0 : lambda
-			 | named_function'''
 	p[0] = p[1]
 	
 def p_expr_structure(p):
@@ -217,13 +214,14 @@ def p_bool_expr_ge(p):
 def p_bool_expr_identifier(p):
 	'''bool_expr : IDENTIFIER'''
 	p[0] = p[1]
+def p_bool_expr_other(p):
+	'''bool_expr : expr'''
+	p[0] = p[1]
 
 	
 # errors
-	
 def p_error(t):
-	print "Syntax error at '%s'" % t
-	raise BadSyntax
+	raise BadSyntax("bad syntax at %s" % str(t))
 	
 
 parser = yacc.yacc()	

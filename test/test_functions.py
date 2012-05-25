@@ -148,6 +148,18 @@ class TestNestedFunctions(unittest.TestCase):
 	def testResult(self):
 		self.assertEquals([40], list(self.pgm.execute()))
 
+class TestFastPower(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		pow = f[p,w; q=f(p*p,w/2) -> if !w then 1 else if w%2 then p*q else q]
+		pow(2,3)
+		""")
+	
+	def testResult(self):
+		self.assertEquals([8], list(self.pgm.execute()))
+	
+	
+
 class TestBuiltinWrite(unittest.TestCase):
 	def setUp(self):
 		self.pgm = parser.parse("""

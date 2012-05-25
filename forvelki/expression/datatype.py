@@ -19,8 +19,10 @@ class conditional(object):
 
 	def evaluate(self, env):
 		if evaluate(self.condition, env):
+			#print self.condition, env, "is true"
 			return evaluate(self.if_true, env)
 		else:
+			#print self.condition, env, "is false"
 			return evaluate(self.if_false, env)
 
 # variable reference
@@ -71,10 +73,10 @@ class identifier(object):
 	def __nonzero__(self):
 		if self.name == "True": return True
 		elif self.name == "False": return False
-		else: raise NotBooleanValue
+		else: raise NotBooleanValue(self)
 	
 	def __repr__(self):
-		return "id(%s)" % self.name
+		return self.name
 
 # structures
 
@@ -153,12 +155,16 @@ class function(object):
 		for assign in self.assigns:
 			env[assign.name] = closure(assign.value, env)
 		return evaluate(self.expr, env)
+#		print "function call", env, "results in", res
+#		return res
 	
 	def evaluate(self, env):
 		return (self, env)
 	
 	def __repr__(self):
-		return "[%s -> %s, %s]"% (str(self.args), str(self.assigns), str(self.expr))
+		#return "[%s -> %s, %s]"% (str(self.args), str(self.assigns), str(self.expr))
+		if self.name: return "<function %s(%s)>" % (self.name, ",".join(self.args))
+		else: return "<anonymous function(%s)>" % ",".join(self.args) 
 		
 		
 class invocation(object):

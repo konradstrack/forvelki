@@ -29,7 +29,7 @@ class TestParser(unittest.TestCase):
 		
 		result = parser.parse(source)
 		self.assertEqual(conditional, type(result[0]))
-		self.assertEqual("if(id(True)) then(50) else(60)", repr(result[0]))
+		self.assertEqual("if(True) then(50) else(60)", repr(result[0]))
 		
 class TestSimplestFunction(unittest.TestCase):
 	def setUp(self):
