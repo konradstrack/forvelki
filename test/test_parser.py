@@ -25,11 +25,11 @@ class TestParser(unittest.TestCase):
 		self.assertEqual(expected, repr(result[0]))
 
 	def test_conditional_expression(self):
-		source = "if 4 then 50 else 60;"
+		source = "if True then 50 else 60;"
 		
 		result = parser.parse(source)
 		self.assertEqual(conditional, type(result[0]))
-		self.assertEqual("if(4) then(50) else(60)", repr(result[0]))
+		self.assertEqual("if(id(True)) then(50) else(60)", repr(result[0]))
 		
 class TestSimplestFunction(unittest.TestCase):
 	def setUp(self):
@@ -62,7 +62,7 @@ class TestFunction(unittest.TestCase):
 	
 class TestNamedFunction(unittest.TestCase):
 	def setUp(self):
-		self.fun = parser.parse("sil[n -> if 4+3 then 2 else 1];")[0]
+		self.fun = parser.parse("sil[n -> if 4+3>0 then 2 else 1];")[0]
 	
 	def test_name(self):
 		self.assertEquals("sil", self.fun.name)

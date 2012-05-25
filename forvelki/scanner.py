@@ -73,22 +73,3 @@ def t_error(t):
 
 
 lexer = lex.lex()
-
-if __name__ == '__main__':
-	
-	source = """
-	x = 2 + 3 * 4
-	@fun[x,y -> x+y]
-	4.4
-	3 == 2
-	'a'
-	"abc"
-	"dupa" #comment
-	Masterczulki
-	"""
-	
-	lexer.input(source)
-	for token in lexer:
-		print token
-	
-	

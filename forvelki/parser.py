@@ -212,9 +212,11 @@ def p_bool_expr_le(p):
 def p_bool_expr_ge(p):
 	'''bool_expr : expr COMP_GE expr'''
 	p[0] = operators.ge(p[1], p[3])
-def p_bool_expr_expr(p): #TODO: remove
-	'''bool_expr : expr'''
+
+def p_bool_expr_identifier(p):
+	'''bool_expr : IDENTIFIER'''
 	p[0] = p[1]
+
 	
 # errors
 	
@@ -223,22 +225,4 @@ def p_error(t):
 	raise BadSyntax
 	
 
-parser = yacc.yacc()
-
-
-if __name__ == '__main__':
-	source = """
-		x=5
-		z=x
-		x=2
-		y=3
-		if z-z then y else z+y
-		x*y
-	"""
-	
-	pgrm = parser.parse(source)
-	print pgrm
-	print
-	for result in pgrm.execute():
-		print result, type(result)
-	
+parser = yacc.yacc()	

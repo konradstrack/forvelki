@@ -58,6 +58,9 @@ class identifier(object):
 	def __neq__(self, other):
 		return not self==other
 	
+	def __hash__(self):
+		return hash(self.name)
+	
 	def __nonzero__(self):
 		if self.name == "True": return True
 		elif self.name == "False": return False

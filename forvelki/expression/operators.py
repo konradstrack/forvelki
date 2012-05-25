@@ -50,8 +50,8 @@ class eq(binary_operator):
 	def evaluate(self, env):
 		ev1 = evaluate(self.v1, env)
 		ev2 = evaluate(self.v2, env)
-		if isinstance(ev1, str): # string comparison needs special-casing
-			if ev1=="" and ev2==identifier("Null"):
+		if isinstance(ev1, str) or isinstance(ev2, str): # string comparison needs special-casing
+			if set([ev1, ev2]) == set(["", identifier("Null")]):
 				return True
 		return ev1 == ev2
 
