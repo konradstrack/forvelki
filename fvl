@@ -3,7 +3,7 @@ from forvelki.parser import parser
 from forvelki.program import executor
 import sys
 from forvelki.error import ForvelkiError
-
+import readline
 
 def execute_file(filename):
 	try:
