@@ -85,6 +85,25 @@ class TestStringLength(unittest.TestCase):
 	def testResult(self):
 		self.assertEquals([0, 3, "mamkota", 7], list(self.pgm.execute()))
 
+class TestFieldUpdate(unittest.TestCase):
+	def setUp(self):
+		self.pgm = parser.parse("""
+		s = {x:1, y:4}
+		s.y
+		s.x = 2
+		s.x
+		s.y
+		o = {}
+		o.f = s
+		o.f.x
+		o.f.y = 3
+		o.f.y
+		s.y
+		""")
+
+	def testResult(self):
+		self.assertEquals([4, 2, 4, 2, 3, 4], list(self.pgm.execute()))
+
 if __name__ == "__main__":
 	#import sys;sys.argv = ['', 'Test.testName']
 	unittest.main()

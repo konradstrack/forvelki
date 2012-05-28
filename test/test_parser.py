@@ -56,8 +56,8 @@ class TestFunction(unittest.TestCase):
 	
 	def test_assigns(self):
 		self.assertEquals(2, len(self.fun.assigns))
-		self.assertEquals(assignment("t", 3), self.fun.assigns[0])
-		self.assertEquals(assignment("q", 5.6), self.fun.assigns[1])
+		self.assertEquals(("t", 3), (self.fun.assigns[0].name, self.fun.assigns[0].value.value))
+		self.assertEquals(("q", 5.6), (self.fun.assigns[1].name, self.fun.assigns[1].value.value))
 		
 	
 class TestNamedFunction(unittest.TestCase):
@@ -74,5 +74,7 @@ class TestStructure(unittest.TestCase):
 	def testAst(self):
 		self.assertEquals(structure, type(self.pgm[0]))
 		self.assertEquals(structure({'y':5, 'x':4}), self.pgm[0])
-		
+	
+class TestNewline(unittest.TestCase):
+	pass
 		

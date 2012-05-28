@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from expression.datatype import variable, conditional, function, invocation
-from program import assignment
-from program import ast as program
+from forvelki.error import BadSyntax
+from forvelki.expression.datatype import structure, field_access, field_update
+from program import assignment, ast as program
 import expression.operators as operators
 import ply.yacc as yacc
 import scanner
-from forvelki.error import BadSyntax
-from forvelki.expression.datatype import structure, field_access
 
 
 tokens = scanner.tokens
@@ -46,10 +45,27 @@ def p_possible_newlines(p):
 
 
 # assignments
-def p_assignment_normal(p):
-	'''assignment : NAME '=' expr'''
-	p[0] = assignment(p[1], p[3])
+#def p_assignment_normal(p):
+#	'''assignment : NAME '=' expr'''
+#	p[0] = assignment(p[1], p[3])
 
+def p_assignment(p):
+	'''assignment : field_list '=' expr'''
+#	if len(p[1]) == 1:
+#		p[0] = assignment(p[1][0], p[3])
+#	else:
+	struct_name = p[1].popleft()
+	p[0] = assignment(struct_name, field_update(variable(struct_name), p[1], p[3]))
+
+
+def p_field_list(p):
+	'''field_list : NAME '.' field_list'''
+	p[3].appendleft(p[1])
+	p[0] = p[3]
+
+def p_field_list_end(p):
+	'''field_list : NAME'''
+	p[0] = deque([p[1]])
 
 # assignment list
 
@@ -142,9 +158,9 @@ def p_expr_call(p):
 	'''expr0 : expr0 '(' expr_list ')' '''
 	p[0] = invocation(p[1], p[3])
 	
-def p_expr_variable(p):
-	'''expr0 : NAME'''
-	p[0] = variable(p[1])
+#def p_expr_variable(p):
+#	'''expr0 : NAME'''
+#	p[0] = variable(p[1])
 
 def p_expr_conditional(p):
 	'''expr : IF bool_expr THEN expr ELSE expr'''
@@ -166,6 +182,14 @@ def p_expr_structure(p):
 def p_field_access(p):
 	'''expr0 : expr0 '.' NAME'''
 	p[0] = field_access(p[1], p[3]) 
+
+def p_field_access_field_list(p):
+	'''expr0 : field_list'''
+	struct = variable(p[1].popleft())
+	fields = p[1]
+	while fields:
+		struct = field_access(struct, fields.popleft())
+	p[0] = struct
 
 # arithmetic
 def p_expr_plus(p):
@@ -211,11 +235,11 @@ def p_bool_expr_ge(p):
 	'''bool_expr : expr COMP_GE expr'''
 	p[0] = operators.ge(p[1], p[3])
 
-def p_bool_expr_identifier(p):
-	'''bool_expr : IDENTIFIER'''
-	p[0] = p[1]
+#def p_bool_expr_identifier(p):
+#	'''bool_expr : IDENTIFIER'''
+#	p[0] = p[1]
 def p_bool_expr_other(p):
-	'''bool_expr : expr'''
+	'''bool_expr : expr0'''
 	p[0] = p[1]
 
 	

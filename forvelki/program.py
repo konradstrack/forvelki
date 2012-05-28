@@ -60,7 +60,8 @@ class closure(object):
 	
 	def __repr__(self):
 		try:
-			return str(self._result)
+			#return "computed(%s)"%str(self._result)
+			return repr(self._result)
 		except AttributeError:
 			return "?"
 			#return "clo(%s, %s)" % (str(self.expr), str(self.env))

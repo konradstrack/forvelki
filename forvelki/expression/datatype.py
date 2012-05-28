@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from builtins import builtins
 from forvelki.error import WrongNumOfArguments, UndefinedVariable, \
-	NotBooleanValue, NoSuchField
+	NotBooleanValue, NoSuchField, ForvelkiTypeError
 from forvelki.program import closure
 from misc import evaluate, needs
-from builtins import builtins
-
+from collections import deque
 
 # conditional expression
 class conditional(object):
@@ -90,20 +90,18 @@ class structure(dict):
 	
 	def evaluate(self, env):
 		return closed_structure(self, env)
-	
-	def __repr__(self):
-		return "structure%s" % super(structure, self).__repr__()
 
-class closed_structure(dict):
-	def __init__(self, struct, env):
-		super(closed_structure, self).__init__()
-		for key in struct:
-			self[key] = closure(struct[key], env)
+
+def closed_structure(struct, env):
+	closed = {}
+	for key in struct:
+		closed[key] = closure(struct[key], env)
+	return closed
 	
-	def __eq__(self, other):
-		return False
-	def __neq__(self, other):
-		return not self==other
+#	def __eq__(self, other):
+#		return False
+#	def __neq__(self, other):
+#		return not self==other
 	
 
 class field_access(object):
@@ -114,9 +112,8 @@ class field_access(object):
 		
 	def evaluate(self, env):
 		clo_str = evaluate(self.struct, env)
-		if not isinstance(clo_str, str):
-			return clo_str[self.field_name]()
-		else: # special-case: strings acts like lists
+		if isinstance(clo_str, str):
+			# special-case: strings acts like lists
 			s = clo_str
 			if not len(s): 
 				raise NoSuchField(self.field_name)
@@ -126,7 +123,42 @@ class field_access(object):
 				return s[1:] or identifier("Null")
 			else:
 				raise NoSuchField(self.field_name)
+		else:
+			try:
+				this_closure = clo_str[self.field_name]
+			except KeyError:
+				raise NoSuchField(self.field_name) 
+			else:
+				return this_closure()
+			
 
+class field_update(object):
+	def __init__(self, struct, fields, value):
+		self.struct = struct
+		self.fields = fields
+		self.value = value
+		
+		self.needs = needs(value)
+		if fields:
+			self.needs.update(needs(struct))
+	
+	def evaluate(self, env): # shall return a structure
+		if not self.fields:
+			return evaluate(self.value, env)
+		else:
+			struct = evaluate(self.struct, env)
+			if not isinstance(struct, dict):
+				print self.struct, struct, self.fields, self.value
+				raise ForvelkiTypeError("unable to update field of non-structure")
+			nd = dict(struct)
+			fields = deque(self.fields)
+			updated_field = fields.popleft()
+			next_struct = nd[updated_field]() if updated_field in nd else {}
+			nd[updated_field] = closure(field_update(next_struct, fields, self.value), env)
+			return evaluate(nd, env) 
+	
+	def __repr__(self):
+		return "field_update(%s, %s, %s)" % (str(self.struct), str(self.fields), str(self.value))
 
 # functions
 

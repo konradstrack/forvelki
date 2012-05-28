@@ -26,7 +26,7 @@ class TestFactorial(unittest.TestCase):
 		""")
 	
 	def testAst(self):
-		fun = self.pgm[0].value
+		fun = self.pgm[0].value.value
 		els = fun.expr.if_false
 		inv = els.v2
 		self.assertEquals(invocation, type(inv))
@@ -47,7 +47,7 @@ class TestClosure(unittest.TestCase):
 		""")
 	
 	def testAST(self):
-		fun = self.pgm[1].value
+		fun = self.pgm[1].value.value
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set(['n']), needs(fun))
 
@@ -65,7 +65,7 @@ class TestArgsClosure(unittest.TestCase):
 		""")
 	
 	def testAST(self):
-		fun = self.pgm[1].value
+		fun = self.pgm[1].value.value
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set(['a']), needs(fun))
 
@@ -83,7 +83,7 @@ class TestFunctionAssignments(unittest.TestCase):
 		""")
 	
 	def testNeeds(self):
-		fun = self.pgm[1].value
+		fun = self.pgm[1].value.value
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set('z'), needs(fun))
 	
@@ -99,7 +99,7 @@ class TestGCD(unittest.TestCase):
 		""")
 	
 	def testNeeds(self):
-		fun = self.pgm[0].value
+		fun = self.pgm[0].value.value
 		self.assertEquals(function, type(fun))
 		self.assertEquals(set(), needs(fun))
 
@@ -151,7 +151,7 @@ class TestNestedFunctions(unittest.TestCase):
 class TestFastPower(unittest.TestCase):
 	def setUp(self):
 		self.pgm = parser.parse("""
-		pow = f[p,w; q=f(p*p,w/2) -> if !w then 1 else if w%2 then p*q else q]
+		pow = f[p,w; q=f(p*p,w/2) -> if (!w) then 1 else (if (w%2) then p*q else q)]
 		pow(2,3)
 		""")
 	

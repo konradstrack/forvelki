@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 from forvelki.parser import parser
 from forvelki.program import executor
-import sys
 from forvelki.error import ForvelkiError
-import readline
+import sys, readline
 
 def execute_file(filename):
 	try:
