@@ -14,7 +14,9 @@
 \usepackage{multicol}
 \usepackage{fullpage}
 \usepackage{syntax}
+\usepackage{indentfirst}
 
+\setcounter{secnumdepth}{1}
 \setlength{\headheight}{15pt}
 \headsep = 10pt
 \usepackage{listings}
@@ -260,5 +262,50 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \end{grammar}
 
+\section{Opis przyjętego systemu typizacji i scopingu}
+	Język jest silnie i dynamicznie typowany.
+	W danym miejscu widoczne są zmienne lokalne i argumenty bieżącej funkcji i funkcji zawierających oraz zmienne globalne zdefiniowane wcześniej.
+
+\section{Opis obsługi i użytkowania programu}
+	Aby pobrać interpreter należy użyć następującej komendy: 
+	
+	\texttt{git clone git://github.com/konradstrack/forvelki.git}
+	
+	W katalogu \texttt{forvelki} będzie znajdować się program interpretera o nazwie \texttt{fvl}.
+	
+	\subsection{Uruchamianie skryptów}	
+	Skrypty języka Forvelki można uruchamiać podając ich ścieżkę jako pierwszy i jedyny argument interpretera.	
+	
+	\subsection{Interaktywny interpreter}
+	Dostępny jest również interaktywny interpreter języka Forvelki.
+	Jest uruchamiany przy wywołaniu programu interpretera bez argumentów.
+	W jednej linii można wpisać jedną lub wiele instrukcji oddzielonych średnikami.
+	Instrukcja musi być skończona w tej samej linii, w której jest rozpoczęta.
+	Jeśli instrukcja jest wyrażeniem, jego wynik wypisywany jest na standardowe wyjście.
+	Z interpretera wychodzi się wprowadzając znak końca pliku.
+
+
+\section{Opis ewolucji języka}
+	W porównaniu do pierwotnych planów zmianie uległy nastębujące elementy języka:
+	\begin{enumerate}
+		\item pam pam pam
+	\end{enumerate}
+
+
+%\section{Opis architektury}
+
+\section{Opis środowiska implementacji}
+	Interpreter języka Forvelki zaimplementowaliśmy w Pythonie.
+	Uznaliśmy, że najodpowiedniejszym sposobem emulacji języka z dynamicznym typowaniem będzie użycie do tego również dynamicznego języka.
+	
+	Wykorzystaliśmy bibliotekę PLY do generowania skanera i parsera.
+	Wybór padł na nią, ponieważ jest biblioteką do Pythona oraz używa się jej podobnie jak narzędzi lex i yacc, z którymi mieliśmy już pewne doświadczenie.
+	
+	Oprócz jej nie użyliśmy żadnych bibliotek spoza biblioteki standardowej.
+
+\section{Opis napotkanych problemów}
+	\subsection{Leniwa ewaluacja}
+	\subsection{Znaki nowej linii}
+	\subsection{Składnia definicji funkcji}
 
 \end{document}
