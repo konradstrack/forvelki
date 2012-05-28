@@ -33,3 +33,9 @@ class NoSuchField(ForvelkiError):
 		self.field_name = field_name
 	def __str__(self):
 		return "no such field: %s" % self.field_name
+
+class AssignmentToBuiltin(ForvelkiError):
+	def __init__(self, builtin_name):
+		self.builtin_name = builtin_name
+	def __str__(self):
+		return "assignment to builtin function %s" % self.builtin_name

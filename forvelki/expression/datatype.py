@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from forvelki.error import WrongNumOfArguments, UndefinedVariable,\
+from forvelki.error import WrongNumOfArguments, UndefinedVariable, \
 	NotBooleanValue, NoSuchField
 from forvelki.program import closure
 from misc import evaluate, needs
+from builtins import builtins
 
 
 # conditional expression
@@ -33,16 +34,17 @@ class variable(object):
 	def __init__(self, name):
 		self.name = name
 		self.needs = set([name])
-		for provided in ["write"]:
-			self.needs.discard(provided)
+		for builtin in builtins:
+			self.needs.discard(builtin)
 	
 	def __repr__(self):
 		return self.name
 
 	def evaluate(self, env):
 		try:
-			#if self.name == 'read': return builtin_read # special-casing builtin functions
-			if self.name == 'write': return builtin_write
+			# special-casing builtin functions
+			try: return builtins[self.name]
+			except KeyError: pass
 			closure = env[self.name]
 		except KeyError as e:
 			#print "evaluating", self, env
@@ -200,17 +202,3 @@ class invocation(object):
 		
 		
 		
-# builtins
-
-def instantiate_and_close(cls):
-	return (cls(), {})
-
-@instantiate_and_close
-class builtin_write(object):
-	def __init__(self):
-		self.args = ["x"]
-		self.name = None
-	def call(self, env):
-		x = env[self.args[0]]()
-		print x
-		return x

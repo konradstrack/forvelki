@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 from expression.misc import needs, evaluate
-from forvelki.error import UndefinedVariable, ForvelkiTypeError
+from expression.builtins import builtins
+from error import UndefinedVariable, ForvelkiTypeError
+from forvelki.error import AssignmentToBuiltin
 
 
 
@@ -34,6 +36,8 @@ class ast(deque):
 
 class assignment(object):
 	def __init__(self, name, value):
+		if name in builtins:
+			raise AssignmentToBuiltin(name)		
 		self.name = name
 		self.value = value
 		self.needs = needs(value)
