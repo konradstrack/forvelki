@@ -89,15 +89,15 @@ class structure(dict):
 		#print "struct needs:", self.needs, list(self), map(lambda k: needs(self[k]), list(self))
 	
 	def evaluate(self, env):
-		return closed_structure(self, env)
+		closed = {}
+		for key in self:
+			closed[key] = closure(self[key], env)
+		return closed_structure(closed)
 
 
-def closed_structure(struct, env):
-	closed = {}
-	for key in struct:
-		closed[key] = closure(struct[key], env)
-	return closed
-	
+class closed_structure(dict):
+	def __repr__(self):
+		return "{%s}" % ", ".join(["%s: %s"%(str(k),str(v)) for k,v in self.iteritems()])
 #	def __eq__(self, other):
 #		return False
 #	def __neq__(self, other):
@@ -155,7 +155,7 @@ class field_update(object):
 			updated_field = fields.popleft()
 			next_struct = nd[updated_field]() if updated_field in nd else {}
 			nd[updated_field] = closure(field_update(next_struct, fields, self.value), env)
-			return evaluate(nd, env) 
+			return evaluate(closed_structure(nd), env) 
 	
 	def __repr__(self):
 		return "field_update(%s, %s, %s)" % (str(self.struct), str(self.fields), str(self.value))

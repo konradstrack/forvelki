@@ -1,7 +1,6 @@
 from forvelki.expression.datatype import function, variable, conditional,\
 	structure
 from forvelki.parser import parser
-from forvelki.program import assignment
 import forvelki.expression.operators as operators
 import unittest
 
@@ -76,5 +75,23 @@ class TestStructure(unittest.TestCase):
 		self.assertEquals(structure({'y':5, 'x':4}), self.pgm[0])
 	
 class TestNewline(unittest.TestCase):
-	pass
+	def testGetsParsedCorrectly(self):
+		parser.parse("""
+		s = {
+			x:1,
+			y:2
+		}
+		s
+		
+		fun = name[x,y;
+			z = x+y;
+			z = z*z ->	
+			z + 1
+		]
+		fun(1,2)
+		
+		lam = [a;;;;; x=1; ->	a+1;;;;;;
+		]
+
+		""")
 		

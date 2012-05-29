@@ -40,8 +40,8 @@ def p_instruction_empty(p):
 
 
 def p_possible_newlines(p):
-	'''pos_nl : 
-						| SEPARATOR pos_nl'''
+	'''pos_nl :
+			  | SEPARATOR pos_nl'''
 
 
 # assignments
@@ -70,13 +70,13 @@ def p_field_list_end(p):
 # assignment list
 
 def p_assignment_list_empty(p):
-	'''assignment_list : '''
+	'''assignment_list : pos_nl'''
 	p[0] = deque([])
 
 def p_assignment_list_normal(p):
-	'''assignment_list : SEPARATOR assignment assignment_list '''
-	p[3].appendleft(p[2])
-	p[0] = p[3]
+	'''assignment_list : SEPARATOR pos_nl assignment assignment_list '''
+	p[4].appendleft(p[3])
+	p[0] = p[4]
 
 
 
@@ -144,9 +144,9 @@ def p_key_value_list_tail_empty(p):
 	p[0] = deque()
 
 def p_key_value_list_tail_normal(p):
-	'''key_value_list_tail : ',' NAME ':' expr key_value_list_tail'''
-	p[5].appendleft((p[2], p[4]))
-	p[0] = p[5]
+	'''key_value_list_tail : ',' pos_nl NAME ':' expr key_value_list_tail'''
+	p[6].appendleft((p[3], p[5]))
+	p[0] = p[6]
 
 
 # expressions
@@ -176,8 +176,8 @@ def p_expr_direct(p):
 	p[0] = p[1]
 	
 def p_expr_structure(p):
-	'''expr0 : '{' key_value_list '}' '''
-	p[0] = structure(p[2])
+	'''expr0 : '{' pos_nl key_value_list pos_nl '}' '''
+	p[0] = structure(p[3])
 
 def p_field_access(p):
 	'''expr0 : expr0 '.' NAME'''
