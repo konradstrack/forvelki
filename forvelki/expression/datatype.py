@@ -193,12 +193,13 @@ class function(object):
 #		return res
 	
 	def evaluate(self, env):
-		return (self, env)
+		try:
+			return (self, {key:env[key] for key in self.needs})
+		except KeyError as e:
+			raise UndefinedVariable(e.args[0])
 	
 	def __repr__(self):
-		#return "[%s -> %s, %s]"% (str(self.args), str(self.assigns), str(self.expr))
-		if self.name: return "<function %s(%s)>" % (self.name, ",".join(self.args))
-		else: return "<anonymous function(%s)>" % ",".join(self.args) 
+		return "<function %s(%s)>" % (self.name or "anonymous", ",".join(self.args))
 		
 		
 class invocation(object):
