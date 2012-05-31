@@ -1,0 +1,14 @@
+fixpoint = y[f -> f(y(f))]
+
+gen_fact = [fact -> 
+	[n -> 
+		if n then 
+			n*fact(n-1)
+		else
+			1
+	]
+]
+
+fact = fixpoint(gen_fact)
+
+fact(4); fact(5); fact(0)

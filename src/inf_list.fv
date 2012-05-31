@@ -1,0 +1,5 @@
+integers = f[n -> {hd: n, tl: f(n+1)}](1)
+
+integers.hd
+integers = integers.tl
+integers.hd
