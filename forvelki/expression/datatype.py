@@ -148,8 +148,8 @@ class field_update(object):
 		else:
 			struct = evaluate(self.struct, env)
 			if not isinstance(struct, dict):
-				print self.struct, struct, self.fields, self.value
-				raise ForvelkiTypeError("unable to update field of non-structure")
+				#print self.struct, struct, self.fields, self.value
+				raise ForvelkiTypeError("unable to update field %s of non-structure %s" % (self.fields[0], self.struct))
 			nd = dict(struct)
 			fields = deque(self.fields)
 			updated_field = fields.popleft()

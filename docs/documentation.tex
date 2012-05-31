@@ -16,6 +16,7 @@
 \usepackage{syntax}
 \usepackage{indentfirst}
 
+\renewcommand{\thesection}{\arabic{section}.}
 \setcounter{secnumdepth}{1}
 \setlength{\headheight}{15pt}
 \headsep = 10pt
@@ -120,7 +121,7 @@ Związane zmienne mogą mieć ponownie przypisaną wartość.
 
 
 \subsection{Typy danych}
-Język Forvelki obsługuje następujące typy danych: liczby całkowite, liczby zmiennoprzecinkowe, znaki, napisy, typ logiczny, struktury oraz identyfikatory.
+Język Forvelki obsługuje następujące typy danych: liczby całkowite, liczby zmiennoprzecinkowe, napisy, typ logiczny, struktury oraz identyfikatory.
 Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np.~\texttt{3.14}.
 Identyfikatory to słowa pisane z wielkiej litery.
 Przy porównaniu dwa identyfikatory są równe wtedy i tylko wtedy, gdy są takimi samymi słowami.
@@ -132,8 +133,8 @@ Do pól można odwoływać się przez operator kropki, np. \texttt{\{x:1,~y:2\}.
 Gdy zmienna jest związana ze strukturą, można modyfikować jej zawartość poprzez przypisania do pól.
 Można też dodawać nowe pola, jeśli pole, do którego przypisujemy wartość jeszcze nie istnieje.
 
-Znaki muszą być ujęte w pojedyncze cudzysłowy, np.~\texttt{'a'}
-Napisy natomiast w podwójne cudzysłowy, np.~\texttt{''raz dwa trzy''}.
+%Znaki muszą być ujęte w pojedyncze cudzysłowy, np.~\texttt{'a'}
+Napisy muszą być ujęte w podwójne cudzysłowy, np.~\texttt{''raz dwa trzy''}.
 Napis jest reprezentowany jako struktura \texttt{\{hd:<pierwszy-znak>,~tl:<reszta-napisu>\}}, przy czym napis pusty \texttt{''''} jako identyfikator \texttt{Null}.
 
 Język jest silnie typowany i nie ma możliwości rzutowania typów.
@@ -154,7 +155,7 @@ Aby funkcja mogła być rekurencyjna, musi być nazwana.
 Osiąga się to przez umieszczenie nazwy przed ciałem funkcji.
 Nazwa jest pojedynczym słowem pisanym z małej litery.
 Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n -> prog=1; if n <= prog then 1 else n*silnia(n-1)]}.
-Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
+%Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
 
 \subsection{Domknięcia}
 Za każdym razem, gdy definiowana jest nowa funkcja, związane zmienne, których ona używa są zapamiętane.
@@ -285,13 +286,6 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 	Z interpretera wychodzi się wprowadzając znak końca pliku.
 
 
-\section{Opis ewolucji języka}
-	W porównaniu do pierwotnych planów zmianie uległy nastębujące elementy języka:
-	\begin{enumerate}
-		\item pam pam pam
-	\end{enumerate}
-
-
 %\section{Opis architektury}
 
 \section{Opis środowiska implementacji}
@@ -305,7 +299,38 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \section{Opis napotkanych problemów}
 	\subsection{Leniwa ewaluacja}
+		Zaprojektowanie implementacji leniwej ewaluacji nie było dla nas trywialnym zagadnieniem.
+		Semantyka "co najwyżej raz" wymagała stworzenia obiektu zapamiętującego wynik obliczenia.
+		Pozostawał problem zależności obliczanego wyrażenia w postaci związanych zmiennych.
+		Nie wystarczyło zapamiętać nazwy zmiennej, ponieważ jej zawartość mogła się do czasu obliczania wyrażenia zmienić.
+
+		Rozważaliśmy dekorowanie nazw, aby zapewnić niezmienność związanej zmiennej, ale ostatecznie zdecydowaliśmy się
+		na przechowywanie wraz z każdym domknięciem odwzorowania nazw funkcji na wskaźnik na odpowiedni obiekt z wyrażeniem.
+		Wadą takiego rozwiązania jest złożoność pamięciowa, a zaletą względna prostota implementacji.	
+	
 	\subsection{Znaki nowej linii}
+		Chcieliśmy, aby instrukcje można było rozdzielać również znakiem nowej linii, a nie tylko średnikiem.
+		Przez to nie mogliśmy sobie pozwolić na ignorowanie znaków nowej linii podczas fazy skanowania kodu źródłowego,
+		co z kolei spowodowało, że wszystkie miejsca, gdzie mogły wystąpić te znaki w kodzie źródłowym
+		musiały być explicite zaznaczone w gramatyce języka.
+
+		Żeby nie zaśmiecać gramatyki, a jednocześnie nie zmuszać programisty do pisania wszystkich wyrażeń w jednej linii,
+		zdecydowaliśmy się zezwolić na znaki nowej linii tylko w niektórych miejscach w obrębie definicji funkcji.
+		
+	
 	\subsection{Składnia definicji funkcji}
+		Okazało się, że naturalna gramatyka opisująca składnię definicji funkcji nie jest klasy LR(1)
+		i generuje konflikty typu redukcja/redukcja.
+		Żadne arbitralne rozstrzygnięcie tego konfliktu nie prowadziło do powstania poprawnego parsera.
+
+		Aby nie komplikować gramatyki języka, zdecydowaliśmy się zmienić składnię funkcji.
+
+\section{Opis ewolucji języka}
+	W porównaniu do pierwotnych planów zmianie uległy następujące elementy języka:
+	\begin{enumerate}
+		\item składnia definicji funkcji zmieniła się tak, że przypisania do zmiennych lokalnych znajdują się przed znakami \texttt{->}, ponieważ do poprzedniej składni nie potrafiliśmy utworzyć prostej gramatyki klasy LR(1)
+		\item zrezygnowaliśmy z operatora skrótowego przypisania \texttt{@}, ponieważ uznaliśmy, że jest niespójny ze składnią reszty języka
+		\item zamiast oddzielnego typu znaków, w języku Forvelki wykorzystywane są napisy o długości 1
+	\end{enumerate}
 
 \end{document}
