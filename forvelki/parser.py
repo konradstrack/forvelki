@@ -163,8 +163,8 @@ def p_expr_call(p):
 #	p[0] = variable(p[1])
 
 def p_expr_conditional(p):
-	'''expr : IF bool_expr THEN expr ELSE expr'''
-	p[0] = conditional(p[2], p[4], p[6])
+	'''expr : IF bool_expr THEN pos_nl expr pos_nl ELSE pos_nl expr'''
+	p[0] = conditional(p[2], p[5], p[9])
 
 def p_expr_direct(p):
 	'''expr0 : INTEGER
