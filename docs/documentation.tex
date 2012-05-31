@@ -121,7 +121,7 @@ Związane zmienne mogą mieć ponownie przypisaną wartość.
 
 
 \subsection{Typy danych}
-Język Forvelki obsługuje następujące typy danych: liczby całkowite, liczby zmiennoprzecinkowe, napisy, typ logiczny, struktury oraz identyfikatory.
+Język Forvelki obsługuje następujące typy danych: liczby całkowite, liczby zmiennoprzecinkowe, napisy, struktury oraz identyfikatory.
 Literały liczb zmiennoprzecinkowych pisane są z kropką w środku, np.~\texttt{3.14}.
 Identyfikatory to słowa pisane z wielkiej litery.
 Przy porównaniu dwa identyfikatory są równe wtedy i tylko wtedy, gdy są takimi samymi słowami.
@@ -139,7 +139,7 @@ Napis jest reprezentowany jako struktura \texttt{\{hd:<pierwszy-znak>,~tl:<reszt
 
 Język jest silnie typowany i nie ma możliwości rzutowania typów.
 Na liczbach można wykonywać wszystkie operacje arytmetyczne zdefiniowane w gramatyce oraz operacje porównania.
-Na typie logicznym można wykonywać operację negacji \texttt{!}.
+%Na typie logicznym można wykonywać operację negacji \texttt{!}.
 Na wszystkich typach można dokonywać operacji porównania \texttt{==} i \texttt{!=}.
 
 \subsection{Wyrażenie warunkowe}
@@ -148,13 +148,13 @@ Wyrażenie warunkowe ma postać:
 Przy czym \texttt{<warunek>} musi być wyrażeniem typu logicznego.
 
 \subsection{Funkcje}
-Funkcje anonimowe są definiowane składnią \texttt{[<lista argumentów> -> <przypisanie>;<przypisanie>;...; <wyrażenie>]}.
+Funkcje anonimowe są definiowane składnią \texttt{[<lista argumentów> ;<przypisanie>;... ->  <wyrażenie>]}.
 Przykładowo, funkcja obliczająca sumę dwóch argumentów wygląda następująco: \texttt{[x,y~->~x+y]}.
 Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
 Osiąga się to przez umieszczenie nazwy przed ciałem funkcji.
 Nazwa jest pojedynczym słowem pisanym z małej litery.
-Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n -> prog=1; if n <= prog then 1 else n*silnia(n-1)]}.
+Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n; prog=;->  if n <= prog then 1 else n*silnia(n-1)]}.
 %Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
 
 \subsection{Domknięcia}
@@ -168,7 +168,10 @@ Kolejność wyliczania wartości w obrębie funkcji jest zgodna z~kolejnością 
 
 \subsection{Wejście/wyjście}
 Dostępna jest funkcja \texttt{write[x->x]}, która ma efekt uboczny - wypisanie argumentu na standardowe wyjście.
+
 Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
+Kolejno próbowane są konwersje na liczbę całkowitą i rzeczywistą.
+Jeśli się nie powiodą, funkcja \texttt{read} zwraca napis.
 
 \section{Specyfikacja gramatyki języka}
 
@@ -177,28 +180,28 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 <separator>     ::= `\\n' | `;'
 
-<instrukcja>    ::= <definicja> | <wyrażenie> | $\varepsilon$
+<instrukcja>    ::= <przypisanie> | <wyrażenie> | $\varepsilon$
 
-<definicja>     ::= <przypisanie> | <skrót-funkcji>
+%<definicja>     ::= <przypisanie> | <skrót-funkcji>
 
 <przypisanie>   ::= <lwartość> `=' <wyrażenie>
 
-<skrót-funkcji> ::= `@' <nazwa> <lambda>
-
+%<skrót-funkcji> ::= `@' <nazwa> <lambda>
+%
 \vskip 0.5cm
 
 <funkcja>       ::= <nazwa> <lambda> | <lambda>
 
-<lambda>        ::= `[' <lista-arg> `->' <lista-def> <wyrażenie> `]'
+<lambda>        ::= `[' <lista-arg> <lista-def> `->' <wyrażenie> `]'
 
 <lista-arg>     ::= <nazwa> <lista-arg1> | $\varepsilon$
 
 <lista-arg1>    ::= `,' <nazwa> <lista-arg1> | $\varepsilon$
 
-<lista-def>     ::= <definicja> <lista-def1> | $\varepsilon$
+<lista-def>     ::= <separator> <definicja> <lista-def> | $\varepsilon$
 
-<lista-def1>    ::= <separator> <definicja> <lista-def1> | $\varepsilon$
-
+%<lista-def1>    ::= <separator> <definicja> <lista-def1> | $\varepsilon$
+%
 \vskip 0.5cm
 
 <wyrażenie>     ::= <wyrażenie> <operator> <wyrażenie> | `(' <wyrażenie> `)' | <operator-jedn> <wyrażenie> | <wyrażenie> `.' <lwartość> | <instrukcja-warunkowa> | <struktura> | <funkcja> | <napis> | <symbol> | <liczba>
@@ -327,10 +330,11 @@ Funkcja \texttt{read} wczytuje wartość ze standardowego wejścia i zwraca ją.
 
 \section{Opis ewolucji języka}
 	W porównaniu do pierwotnych planów zmianie uległy następujące elementy języka:
-	\begin{enumerate}
+	\begin{itemize}
 		\item składnia definicji funkcji zmieniła się tak, że przypisania do zmiennych lokalnych znajdują się przed znakami \texttt{->}, ponieważ do poprzedniej składni nie potrafiliśmy utworzyć prostej gramatyki klasy LR(1)
 		\item zrezygnowaliśmy z operatora skrótowego przypisania \texttt{@}, ponieważ uznaliśmy, że jest niespójny ze składnią reszty języka
 		\item zamiast oddzielnego typu znaków, w języku Forvelki wykorzystywane są napisy o długości 1
-	\end{enumerate}
+		\item nie ma logicznego typu danych, operatory porównań mogą występować wyłącznie w sekcji warunku wyrażenia logicznego
+	\end{itemize}
 
 \end{document}
