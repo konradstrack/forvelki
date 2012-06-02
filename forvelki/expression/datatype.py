@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from builtins import builtins
 from forvelki.error import WrongNumOfArguments, UndefinedVariable, \
-	NotBooleanValue, NoSuchField, ForvelkiTypeError
+	NotBooleanValue, NoSuchField, ForvelkiTypeError, NotCallable
 from forvelki.program import closure
 from misc import evaluate, needs
 from collections import deque
@@ -211,7 +211,8 @@ class invocation(object):
 		
 	def evaluate(self, env):
 		function_value = evaluate(self.function_expr, env) # Schauen Sie bitte auf die Methode call in der Klasse function.
-		assert isinstance(function_value, tuple)
+		if not isinstance(function_value, tuple):
+			raise NotCallable(function_value)
 		
 		function = function_value[0]
 		function_env = function_value[1]

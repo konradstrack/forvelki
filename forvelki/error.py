@@ -39,3 +39,9 @@ class AssignmentToBuiltin(ForvelkiError):
 		self.builtin_name = builtin_name
 	def __str__(self):
 		return "assignment to builtin function %s" % self.builtin_name
+
+class NotCallable(ForvelkiError):
+	def __init__(self, value):
+		self.value = value
+	def __str__(self):
+		return "value %s is not callable" % str(self.value)
