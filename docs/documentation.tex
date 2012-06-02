@@ -154,7 +154,7 @@ Argumenty wywołania funkcji umieszcza się w nawiasach okrągłych.
 Aby funkcja mogła być rekurencyjna, musi być nazwana.
 Osiąga się to przez umieszczenie nazwy przed ciałem funkcji.
 Nazwa jest pojedynczym słowem pisanym z małej litery.
-Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n; prog=;->  if n <= prog then 1 else n*silnia(n-1)]}.
+Funkcja obliczająca silnię argumentu może wyglądać następująco: \texttt{silnia[n; prog=1 -> if n <= prog then 1 else n*silnia(n-1)]}.
 %Aby jednocześnie zdefiniować funkcję rekurencyjną o nazwie \texttt{<nazwa>} i przypisać ją do zmiennej o tej samej nazwie, można użyć skrótowej konstrukcji \texttt{@<nazwa>[<ciało funkcji>]}.
 
 \subsection{Domknięcia}
@@ -298,12 +298,12 @@ Jeśli się nie powiodą, funkcja \texttt{read} zwraca napis.
 	Wykorzystaliśmy bibliotekę PLY do generowania skanera i parsera.
 	Wybór padł na nią, ponieważ jest biblioteką do Pythona oraz używa się jej podobnie jak narzędzi lex i yacc, z którymi mieliśmy już pewne doświadczenie.
 	
-	Oprócz jej nie użyliśmy żadnych bibliotek spoza biblioteki standardowej.
+	Oprócz niej nie użyliśmy żadnych bibliotek spoza biblioteki standardowej.
 
 \section{Opis napotkanych problemów}
 	\subsection{Leniwa ewaluacja}
 		Zaprojektowanie implementacji leniwej ewaluacji nie było dla nas trywialnym zagadnieniem.
-		Semantyka "co najwyżej raz" wymagała stworzenia obiektu zapamiętującego wynik obliczenia.
+		Semantyka ``co najwyżej raz'' wymagała stworzenia obiektu zapamiętującego wynik obliczenia.
 		Pozostawał problem zależności obliczanego wyrażenia w postaci związanych zmiennych.
 		Nie wystarczyło zapamiętać nazwy zmiennej, ponieważ jej zawartość mogła się do czasu obliczania wyrażenia zmienić.
 
