@@ -239,7 +239,7 @@ def p_bool_expr_ge(p):
 #	'''bool_expr : IDENTIFIER'''
 #	p[0] = p[1]
 def p_bool_expr_other(p):
-	'''bool_expr : expr0'''
+	'''bool_expr : expr'''
 	p[0] = p[1]
 
 	
