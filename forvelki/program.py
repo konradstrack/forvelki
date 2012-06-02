@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from collections import deque
-from expression.misc import needs, evaluate
 from expression.builtins import builtins
-from error import UndefinedVariable, ForvelkiTypeError
-from forvelki.error import AssignmentToBuiltin
+from expression.misc import needs, evaluate
+from forvelki.error import AssignmentToBuiltin, ForvelkiError, UndefinedVariable
 
 
 
@@ -20,8 +19,8 @@ class executor(object):
 				result = evaluate(instr, self.env)
 				if verbose: print result
 				else: return result
-		except TypeError as e:
-			raise ForvelkiTypeError(e.args[0])
+		except (TypeError, RuntimeError, ArithmeticError) as e:
+			raise ForvelkiError(e.args[0])
 
 class ast(deque):
 	def execute(self):

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from builtins import builtins
+from collections import deque
 from forvelki.error import WrongNumOfArguments, UndefinedVariable, \
-	NotBooleanValue, NoSuchField, ForvelkiTypeError, NotCallable
+	NotBooleanValue, NoSuchField, NotCallable, ForvelkiError
 from forvelki.program import closure
 from misc import evaluate, needs
-from collections import deque
 
 # conditional expression
 class conditional(object):
@@ -149,7 +149,7 @@ class field_update(object):
 			struct = evaluate(self.struct, env)
 			if not isinstance(struct, dict):
 				#print self.struct, struct, self.fields, self.value
-				raise ForvelkiTypeError("unable to update field %s of non-structure %s" % (self.fields[0], self.struct))
+				raise ForvelkiError("unable to update field %s of non-structure %s" % (self.fields[0], self.struct))
 			nd = dict(struct)
 			fields = deque(self.fields)
 			updated_field = fields.popleft()

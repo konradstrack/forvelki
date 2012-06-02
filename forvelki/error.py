@@ -1,8 +1,5 @@
 class ForvelkiError(Exception):
-	pass
-
-class ForvelkiTypeError(ForvelkiError):
-	def __init__(self, descr):
+	def __init__(self, descr): # this do not needs to be invoken in subclass
 		self.descr = descr
 	def __str__(self):
 		return self.descr
